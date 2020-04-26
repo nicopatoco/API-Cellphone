@@ -48,8 +48,8 @@ CREATE TABLE IF NOT EXISTS Bills (
     cellphone_id INT NOT NULL,
     client_id INT NOT NULL,
     amount_of_calls INT,
-    final_value FLOAT,
-    date DATETIME NOT NULL,
+    final_price FLOAT,
+    bill_date DATETIME NOT NULL,
     due_date DATETIME NOT NULL,
     CONSTRAINT cellphone_id FOREIGN KEY(cellphone_id) references Cellphones(cellphone_id),
     CONSTRAINT client_id FOREIGN KEY(client_id) references Clients(client_id)
