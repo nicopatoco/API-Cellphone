@@ -9,4 +9,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cellphone {
+    private String phoneNumber;
+
 }
