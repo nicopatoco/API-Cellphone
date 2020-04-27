@@ -10,8 +10,6 @@ public interface DaoInterface<T> {
 
     void remove(Integer id);
 
-    void remove(T value);
-
     T getById(Integer id);
 
     List<T> getAll();

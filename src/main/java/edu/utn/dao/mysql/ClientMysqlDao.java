@@ -59,11 +59,6 @@ public class ClientMysqlDao implements ClientDaoInterface {
     }
 
     @Override
-    public void remove(Client value) {
-
-    }
-
-    @Override
     public Client getById(Integer id) {
         return null;
     }
