@@ -10,5 +10,4 @@ public interface ClientRepository extends JpaRepository<Clients, Integer> {
 
     @Query(value = "Select * from clients where name = ?1", nativeQuery = true)
     List<Clients> findByName(String name);
-
 }

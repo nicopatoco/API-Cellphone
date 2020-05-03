@@ -34,4 +34,8 @@ public class ClientService {
         }
         return CLIENT_REPOSITORY.findByName(name);
     }
+
+    public void delete(Clients client) {
+        CLIENT_REPOSITORY.delete(client);
+    }
 }
