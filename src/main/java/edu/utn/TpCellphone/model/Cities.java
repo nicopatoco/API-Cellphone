@@ -15,13 +15,12 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Clients {
+public class Cities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_client;
-
-    private String id;
-    private String name;
-    private String surname;
     private int id_city;
+
+    private int id_province;
+    private String name;
+    private int prefix;
 }

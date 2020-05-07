@@ -34,4 +34,8 @@ public class ClientController {
         return CLIENT_SERVICE.getAll(name);
     }
 
+    @DeleteMapping("/")
+    public void deleteClient(@RequestBody Clients client) {
+        CLIENT_SERVICE.delete(client);
+    }
 }
