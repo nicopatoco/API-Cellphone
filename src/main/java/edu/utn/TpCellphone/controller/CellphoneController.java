@@ -26,7 +26,7 @@ public class CellphoneController {
     }
 
     @PostMapping("/")
-    public void addCity(@RequestBody Cellphones newCellphone) {
+    public void addCellphone(@RequestBody Cellphones newCellphone) {
         CELLPHONE_SERVICE.addClient(newCellphone);
     }
 
