@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @ToString
@@ -22,5 +19,9 @@ public class Cellphones {
 
     private int cellphone_number;
     private String user_type;
-    private int id_client;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_client", referencedColumnName = "id_client")
+    private Clients client;
+
 }
