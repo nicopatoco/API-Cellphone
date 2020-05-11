@@ -69,11 +69,4 @@ public class ClientServiceTest {
         verify(repository, times(1)).delete(clients);
     }
 
-/*
-    public void delete(Clients client) {
-        CLIENT_REPOSITORY.delete(client);
-    }
-
-     */
-
 }
