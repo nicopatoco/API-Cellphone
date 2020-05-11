@@ -1,9 +1,7 @@
 package edu.utn.TpCellphone.controller;
 
 import edu.utn.TpCellphone.model.Cellphones;
-import edu.utn.TpCellphone.model.Cities;
 import edu.utn.TpCellphone.service.CellphoneService;
-import edu.utn.TpCellphone.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
