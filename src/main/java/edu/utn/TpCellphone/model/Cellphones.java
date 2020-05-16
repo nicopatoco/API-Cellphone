@@ -8,7 +8,7 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Data
-@ToString(exclude = "clients")
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
