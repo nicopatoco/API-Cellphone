@@ -1,6 +1,5 @@
 package edu.utn.TpCellphone.service;
 
-
 import edu.utn.TpCellphone.model.Cities;
 import edu.utn.TpCellphone.repository.CityRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,12 +38,13 @@ public class CityServiceTest {
 
     @Test
     public void getByIdTest() {
-        Cities cities = new Cities(1, 1, "mar del plata", 223);
         when(repository.findById(1)).thenReturn(java.util.Optional.of(cities));
         Optional<Cities> response = cityService.getById(1);
 
         assertNotNull(response);
+
         assertEquals(1, cities.getId_city());
+        assertEquals("mar del plata", cities.getName());
     }
 
     @Test
