@@ -20,8 +20,8 @@ public class ProvinceService {
         return PROVINCE_REPOSITORY.findById(id_province);
     }
 
-    public void addProvince(Provinces newProvince) {
-        PROVINCE_REPOSITORY.save(newProvince);
+    public Provinces addProvince(Provinces newProvince) {
+        return PROVINCE_REPOSITORY.save(newProvince);
     }
 
     public List<Provinces> getAll() {
@@ -30,5 +30,11 @@ public class ProvinceService {
 
     public void delete(Provinces province) {
         PROVINCE_REPOSITORY.delete(province);
+    }
+
+    public Provinces update(Provinces provinces, Integer id_province) {
+        Provinces provincesToUpdate = PROVINCE_REPOSITORY.getOne(id_province);
+        provincesToUpdate.setName(provinces.getName());
+        return PROVINCE_REPOSITORY.save(provincesToUpdate);
     }
 }
