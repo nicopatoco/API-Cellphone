@@ -39,7 +39,6 @@ public class CityServiceTest {
 
     @Test
     public void getByIdTest() {
-        Cities cities = new Cities(1, 1, "mar del plata", 223);
         when(repository.findById(1)).thenReturn(java.util.Optional.of(cities));
         Optional<Cities> response = cityService.getById(1);
 
