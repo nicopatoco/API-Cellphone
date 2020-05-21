@@ -24,8 +24,8 @@ public class CityController {
     }
 
     @PostMapping("/")
-    public void addCity(@RequestBody Cities newCity) {
-        CITY_SERVICE.addClient(newCity);
+    public Cities addCity(@RequestBody Cities newCity) {
+        return CITY_SERVICE.addCity(newCity);
     }
 
     @GetMapping("/")
@@ -36,5 +36,10 @@ public class CityController {
     @DeleteMapping("/")
     public void deleteCity(@RequestBody Cities city) {
         CITY_SERVICE.delete(city);
+    }
+    
+    @PutMapping("/{id_city}")
+    public Cities update(@RequestBody Cities city, @PathVariable int id_city) {
+        return CITY_SERVICE.update(city, id_city);
     }
 }
