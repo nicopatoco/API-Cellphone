@@ -1,26 +1,25 @@
 package edu.utn.TpCellphone.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class Cities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_city;
-
-    private int id_province;
     private String name;
     private int prefix;
+    private int id_province;
+    
+    @OneToMany()
+    @JoinColumn(name = "id_city", referencedColumnName = "id_city")
+    private List<Users> usersList;
 }

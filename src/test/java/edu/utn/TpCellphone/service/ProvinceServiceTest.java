@@ -1,5 +1,6 @@
 package edu.utn.TpCellphone.service;
 
+import edu.utn.TpCellphone.model.Cities;
 import edu.utn.TpCellphone.model.Provinces;
 import edu.utn.TpCellphone.repository.ProvinceRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +32,7 @@ public class ProvinceServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.province = new Provinces(1, "Buenos Aires" );
+        this.province = new Provinces(1, "Buenos Aires", new ArrayList<Cities>());
     }
 
     @Test
@@ -79,13 +80,14 @@ public class ProvinceServiceTest {
 
     @Test
     public void updateTest() {
-        Provinces updateProvince = new Provinces();
-        updateProvince.setId_province(1);
-        updateProvince.setName("Mar del plata");
-        when(repository.getOne(province.getId_province())).thenReturn(province);
-        when(repository.save(updateProvince)).thenReturn(updateProvince);
-
-        Provinces response = provinceService.update(updateProvince, updateProvince.getId_province());
-        assertEquals(updateProvince ,response);
+        Provinces provinceToUpdate = new Provinces();
+        provinceToUpdate.setName("Cordoba");
+        int idToUpdate = 1;
+        
+        when(repository.getOne(idToUpdate)).thenReturn(province);
+        when(repository.save(province)).thenReturn(province);
+        Provinces response = provinceService.update(provinceToUpdate, idToUpdate);
+        
+        assertEquals(response ,province);
     }
 }
