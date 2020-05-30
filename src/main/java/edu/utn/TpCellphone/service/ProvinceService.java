@@ -1,7 +1,11 @@
 package edu.utn.TpCellphone.service;
 
+import edu.utn.TpCellphone.exceptions.UserNotexistException;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.repository.ProvinceRepository;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +28,15 @@ public class ProvinceService {
         return PROVINCE_REPOSITORY.save(newProvince);
     }
     
-    public List<Province> getAll() {
-        return PROVINCE_REPOSITORY.findAll();
+    public ResponseEntity<List<Province>> getAll() {
+        List<Province> provinceList = PROVINCE_REPOSITORY.findAll();
+        ResponseEntity<List<Province>> responseEntity;
+        if(provinceList != null) {
+            responseEntity = ResponseEntity.ok(provinceList);
+        } else {
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return responseEntity;
     }
 
     public void delete(Province province) {

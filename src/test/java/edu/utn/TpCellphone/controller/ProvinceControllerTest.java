@@ -2,6 +2,8 @@ package edu.utn.TpCellphone.controller;
 
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.ProvinceService;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +53,13 @@ public class ProvinceControllerTest {
     public void getAllProvincesTest() {
         List<Province> provincesList = new ArrayList<>();
         provincesList.add(province);
-        when(service.getAll()).thenReturn(provincesList);
-        List<Province> responseList = provinceController.getAllProvince();
+        ResponseEntity<List<Province>> responseEntity;
+        responseEntity = ResponseEntity.ok(provincesList);
+        when(service.getAll()).thenReturn(responseEntity);
+        ResponseEntity<List<Province>> responseList = provinceController.getAllProvince();
         
-        assertNotNull(responseList);
-        assertEquals(provincesList, responseList);
+        Assert.assertEquals(200, responseList.getStatusCodeValue());
+        Assert.assertEquals(provincesList, responseList.getBody());
     }
     
     @Test
