@@ -11,15 +11,11 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class Cities {
+@Table(name = "provinces")
+public class Province {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_city;
+    @Column(name = "id_province")
+    private int idProvince;
     private String name;
-    private int prefix;
-    private int id_province;
-    
-    @OneToMany()
-    @JoinColumn(name = "id_city", referencedColumnName = "id_city")
-    private List<Users> usersList;
 }

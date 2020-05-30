@@ -1,7 +1,9 @@
 package edu.utn.TpCellphone.service;
 
-import edu.utn.TpCellphone.model.Cities;
+import edu.utn.TpCellphone.model.City;
+import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.repository.CityRepository;
+import edu.utn.TpCellphone.repository.ProvinceRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,26 +31,31 @@ public class CityServiceTest {
     @Mock
     private CityRepository repository;
     
-    private Cities city;
+    @Mock
+    private ProvinceRepository provinceRepository;
+    
+    private City city;
     
     @BeforeEach
     public void setUo() {
-        this.city = new Cities(1, "mar del plata", 223, 1, null);
+        this.city = new City(1, "mar del plata", 223, new Province(1, "Buenos Aires"));
     }
     
     @Test
     public void getByIdTest() {
         when(repository.findById(1)).thenReturn(java.util.Optional.of(city));
-        Optional<Cities> response = cityService.getById(1);
+        Optional<City> response = cityService.getById(1);
         
         assertNotNull(response);
-        assertEquals(1, city.getId_city());
+        assertEquals(1, city.getIdCity());
     }
     
     @Test
-    public void addClientTest() {
+    public void addCityTest() {
+        Province province = new Province(1, "Buenos Aires");
         when(repository.save(city)).thenReturn(city);
-        Cities response = cityService.addCity(city);
+        when(provinceRepository.findById(city.getProvince().getIdProvince())).thenReturn(Optional.of(province));
+        City response = cityService.addCity(city);
         
         Assertions.assertNotNull(response);
         Assertions.assertEquals(city, response);
@@ -56,10 +63,10 @@ public class CityServiceTest {
     
     @Test
     public void getAllTest() {
-        List<Cities> citiesList = new ArrayList<>();
+        List<City> citiesList = new ArrayList<>();
         citiesList.add(city);
         when(repository.findAll()).thenReturn(citiesList);
-        List<Cities> response = cityService.getAll();
+        List<City> response = cityService.getAll();
         
         assertNotNull(response);
         assertEquals(citiesList, response);
@@ -75,14 +82,14 @@ public class CityServiceTest {
     
     @Test
     public void updateTest() {
-        Cities cityToUpdate = new Cities();
+        City cityToUpdate = new City();
         cityToUpdate.setName("Pinamar");
         cityToUpdate.setPrefix(225);
-        cityToUpdate.setId_province(1);
         int idToUpdate = 1;
+        
         when(repository.getOne(idToUpdate)).thenReturn(city);
         when(repository.save(city)).thenReturn(city);
-        Cities response = cityService.update(cityToUpdate, idToUpdate);
+        City response = cityService.update(cityToUpdate, idToUpdate);
         
         Assertions.assertEquals(response ,city);
     }

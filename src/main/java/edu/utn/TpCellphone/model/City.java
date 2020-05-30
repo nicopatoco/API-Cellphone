@@ -3,7 +3,6 @@ package edu.utn.TpCellphone.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @ToString
@@ -11,13 +10,16 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class Provinces {
+@Table(name = "cities")
+public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_province;
+    @Column(name = "id_city")
+    private int idCity;
     private String name;
+    private int prefix;
     
-    @OneToMany()
-    @JoinColumn(name = "id_province", referencedColumnName = "id_province")
-    private List<Cities> cities;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_province")
+    private Province province;
 }

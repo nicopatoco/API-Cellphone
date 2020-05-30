@@ -1,7 +1,6 @@
 package edu.utn.TpCellphone.service;
 
-import edu.utn.TpCellphone.model.Cities;
-import edu.utn.TpCellphone.model.Provinces;
+import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.repository.ProvinceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,17 +27,17 @@ public class ProvinceServiceTest {
     @Mock
     private ProvinceRepository repository;
 
-    private Provinces province;
+    private Province province;
 
     @BeforeEach
     public void setUp() {
-        this.province = new Provinces(1, "Buenos Aires", new ArrayList<Cities>());
+        this.province = new Province(1, "Buenos Aires");
     }
 
     @Test
     public void addProvinceTest() {
         when(repository.save(province)).thenReturn(province);
-        Provinces response = provinceService.addProvince(province);
+        Province response = provinceService.addProvince(province);
 
         assertNotNull(response);
         assertEquals(province, response);
@@ -47,14 +46,14 @@ public class ProvinceServiceTest {
     @Test
     public void getByIdTest() {
         when(repository.findById(1)).thenReturn(Optional.ofNullable(province));
-        Optional<Provinces> response = provinceService.getById(1);
+        Optional<Province> response = provinceService.getById(1);
 
         assertNotNull(response);
         assertEquals(province, response.get());
 
         //Testing null case
         when(repository.findById(1)).thenReturn(Optional.ofNullable(null));
-        Optional<Provinces> response1 = provinceService.getById(1);
+        Optional<Province> response1 = provinceService.getById(1);
 
         assertTrue(response1.isEmpty());
         assertEquals(province, response.get());
@@ -62,10 +61,10 @@ public class ProvinceServiceTest {
 
     @Test
     public void getAllTest() {
-        List<Provinces> provincesList = new ArrayList<>();
+        List<Province> provincesList = new ArrayList<>();
         provincesList.add(province);
         when(repository.findAll()).thenReturn(provincesList);
-        List<Provinces> responseList = provinceService.getAll();
+        List<Province> responseList = provinceService.getAll();
 
         assertEquals(provincesList, responseList);
     }
@@ -80,13 +79,13 @@ public class ProvinceServiceTest {
 
     @Test
     public void updateTest() {
-        Provinces provinceToUpdate = new Provinces();
+        Province provinceToUpdate = new Province();
         provinceToUpdate.setName("Cordoba");
         int idToUpdate = 1;
         
         when(repository.getOne(idToUpdate)).thenReturn(province);
         when(repository.save(province)).thenReturn(province);
-        Provinces response = provinceService.update(provinceToUpdate, idToUpdate);
+        Province response = provinceService.update(provinceToUpdate, idToUpdate);
         
         assertEquals(response ,province);
     }
