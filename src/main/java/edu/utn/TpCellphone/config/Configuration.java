@@ -3,15 +3,9 @@ package edu.utn.TpCellphone.config;
 import edu.utn.TpCellphone.session.SessionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-import java.util.Arrays;
 
 @org.springframework.context.annotation.Configuration
 @PropertySource("app.properties")

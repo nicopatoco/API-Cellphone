@@ -4,19 +4,22 @@ import edu.utn.TpCellphone.model.User;
 import edu.utn.TpCellphone.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -103,5 +106,34 @@ public class UserControllerTest {
         
         assertNotNull(response);
         assertEquals(userToUpdate, response);
+    }
+    
+    @Test
+    public void loginTest() {
+        User user = new User();
+        String username = "nicopatoco";
+        String password = "abc123";
+        user.setUsername(username);
+        user.setPassword(password);
+        when(service.login(username, password)).thenReturn(user);
+        User response = userController.login(username, password);
+        
+        assertNotNull(response);
+        assertEquals(user, response);
+        verify(service, times(1)).login(username, password);
+    }
+    
+    @Test()
+    public void ExceptionLoginTest() {
+        User user = new User();
+        String username = "nicopatoco";
+        String password = "abc123";
+        user.setUsername(username);
+        user.setPassword(password);
+        doThrow(new RuntimeException("User does not exists")).when(service).login(username, password);
+        
+        assertThrows(RuntimeException.class, () -> {
+            userController.login(username, password);
+        });
     }
 }

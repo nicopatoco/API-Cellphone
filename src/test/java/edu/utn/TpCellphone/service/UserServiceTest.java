@@ -18,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -108,4 +107,31 @@ public class UserServiceTest {
         Assertions.assertEquals(response ,user);
     }
     
+    @Test
+    public void loginTest() {
+        User user = new User();
+        String username = "nicopatoco";
+        String password = "abc123";
+        user.setUsername(username);
+        user.setPassword(password);
+        when(repository.userExists(username, password)).thenReturn(user);
+        User response = userService.login(username, password);
+        
+        assertNotNull(response);
+        assertEquals(user, response);
+    }
+    
+    @Test
+    public void exceptionLoginTest() {
+        User user = new User();
+        String username = "nicopatoco";
+        String password = "abc123";
+        user.setUsername(username);
+        user.setPassword(password);
+        when(repository.userExists(username, password)).thenReturn(null);
+        
+        assertThrows(RuntimeException.class, () -> {
+            userService.login(username, password);
+        });
+    }
 }
