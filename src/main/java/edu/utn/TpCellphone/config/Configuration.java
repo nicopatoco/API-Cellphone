@@ -1,0 +1,42 @@
+package edu.utn.TpCellphone.config;
+
+import edu.utn.TpCellphone.session.SessionFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.support.SimpleCacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.util.Arrays;
+
+@org.springframework.context.annotation.Configuration
+@PropertySource("app.properties")
+@EnableScheduling
+//@EnableCaching
+public class Configuration {
+    
+    @Autowired
+    SessionFilter sessionFilter;
+    
+    @Bean
+    public FilterRegistrationBean myFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(sessionFilter);
+        registration.addUrlPatterns("/api/*");
+        return registration;
+    }
+    
+   /*@Bean
+    public CacheManager cacheManager() {
+        // configure and return an implementation of Spring's CacheManager SPI
+        SimpleCacheManager cacheManager = new SimpleCacheManager();
+        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default")));
+        return cacheManager;
+    }
+    
+    */
+}

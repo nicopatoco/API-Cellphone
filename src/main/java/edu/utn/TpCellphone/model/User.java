@@ -3,7 +3,6 @@ package edu.utn.TpCellphone.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @ToString
@@ -11,29 +10,26 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class Users {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_user;
+    @Column(name = "id_user")
+    private int idUser;
 
     private String id;
     private String name;
     private String surname;
     private String username;
     private String password;
-    private int id_city;
     
     private enum UserType {admin, client};
     
     @Enumerated(EnumType.STRING)
-    private  UserType user_type;
+    @Column(name = "user_type")
+    private  UserType userType;
     
-    @OneToMany
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
-    private List<Cellphones> cellphonesList;
-    
-    @OneToMany
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
-    private List<Bills> billsList;
-    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_city")
+    private City city;
 }

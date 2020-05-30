@@ -1,6 +1,6 @@
 package edu.utn.TpCellphone.service;
 
-import edu.utn.TpCellphone.model.Provinces;
+import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.repository.ProvinceRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,25 +16,25 @@ public class ProvinceService {
         this.PROVINCE_REPOSITORY = PROVINCE_REPOSITORY;
     }
 
-    public Optional<Provinces> getById(Integer id_province) {
+    public Optional<Province> getById(Integer id_province) {
         return PROVINCE_REPOSITORY.findById(id_province);
     }
 
-    public Provinces addProvince(Provinces newProvince) {
+    public Province addProvince(Province newProvince) {
         return PROVINCE_REPOSITORY.save(newProvince);
     }
-
-    public List<Provinces> getAll() {
+    
+    public List<Province> getAll() {
         return PROVINCE_REPOSITORY.findAll();
     }
 
-    public void delete(Provinces province) {
+    public void delete(Province province) {
         PROVINCE_REPOSITORY.delete(province);
     }
 
-    public Provinces update(Provinces provinces, Integer id_province) {
-        Provinces provincesToUpdate = PROVINCE_REPOSITORY.getOne(id_province);
-        provincesToUpdate.setName(provinces.getName());
-        return PROVINCE_REPOSITORY.save(provincesToUpdate);
+    public Province update(Province province, Integer id_province) {
+        Province provinceToUpdate = PROVINCE_REPOSITORY.getOne(id_province);
+        provinceToUpdate.setName(province.getName());
+        return PROVINCE_REPOSITORY.save(provinceToUpdate);
     }
 }

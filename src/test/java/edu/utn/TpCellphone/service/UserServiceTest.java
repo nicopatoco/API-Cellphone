@@ -1,6 +1,9 @@
 package edu.utn.TpCellphone.service;
 
-import edu.utn.TpCellphone.model.Users;
+import edu.utn.TpCellphone.model.City;
+import edu.utn.TpCellphone.model.Province;
+import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.repository.CityRepository;
 import edu.utn.TpCellphone.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,16 +30,21 @@ public class UserServiceTest {
     
     @Mock
     private UserRepository repository;
+    
+    @Mock
+    private CityRepository cityRepository;
 
     @Test
     public void addClientTest() {
-        Users user = new Users();
-        user.setId_user(1);
+        User user = new User();
+        user.setIdUser(1);
         user.setId("35885684");
         user.setName("nicolas");
         user.setName("surname");
+        user.setCity(new City(1, "mar del plata", 223, new Province()));
         when(repository.save(user)).thenReturn(user);
-        Users response = userService.addUser(user);
+        when(cityRepository.findById(user.getCity().getIdCity())).thenReturn(Optional.of(new City()));
+        User response = userService.addUser(user);
 
         assertNotNull(response);
         assertEquals(user, response);
@@ -44,9 +52,9 @@ public class UserServiceTest {
 
     @Test
     public void getByIdTest() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1,"123","juan","Perez", "juancioto", "123abc", null, null);
         when(repository.findById(5)).thenReturn(java.util.Optional.ofNullable(user));
-        Optional<Users> response = userService.getById(5);
+        Optional<User> response = userService.getById(5);
     
         assertNotNull(response);
         assertEquals(user, response.get());
@@ -54,13 +62,13 @@ public class UserServiceTest {
 
     @Test
     public void getAllTest() {
-        Users user1 = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
-        Users user2 = new Users(1,"333","nico","herrera", "nicopatoco", "123abc", 1, null, null, null );
-        List<Users> usersList = new ArrayList<>();
+        User user1 = new User(1,"123","juan","Perez", "juancioto", "123abc", null, null);
+        User user2 = new User(1,"333","nico","herrera", "nicopatoco", "123abc", null, null);
+        List<User> usersList = new ArrayList<>();
         usersList.add(user1);
         usersList.add(user2);
         when(repository.findAll()).thenReturn(usersList);
-        List<Users> response = userService.getAll(null);
+        List<User> response = userService.getAll(null);
     
         assertNotNull(response);
         assertEquals(usersList, response);
@@ -68,11 +76,11 @@ public class UserServiceTest {
 
     @Test
     public void getAllTest2() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
-        List<Users> usersList = new ArrayList<>();
+        User user = new User(1,"123","juan","Perez", "juancioto", "123abc", null, null );
+        List<User> usersList = new ArrayList<>();
         usersList.add(user);
         when(repository.findByName("juan")).thenReturn(usersList);
-        List<Users> response = userService.getAll("juan");
+        List<User> response = userService.getAll("juan");
     
         assertNotNull(response);
         assertEquals(usersList, response);
@@ -80,7 +88,7 @@ public class UserServiceTest {
     
     @Test
     public void deleteTest() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1,"123","juan","Perez", "juancioto", "123abc", null, null);
         doNothing().when(repository).delete(user);
         userService.delete(user);
 
@@ -89,13 +97,13 @@ public class UserServiceTest {
     
     @Test
     public void updateTest() {
-        Users user = new Users(1,"333","nico","herrera", "nicopatoco", "123abc", 1, null, null, null );
-        Users userToUpdate = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1,"333","nico","herrera", "nicopatoco", "123abc", null, new City());
+        User userToUpdate = new User(1,"123","juan","Perez", "juancioto", "123abc", null, new City());
         int idToUpdate = 1;
         
         when(repository.getOne(idToUpdate)).thenReturn(user);
         when(repository.save(user)).thenReturn(user);
-        Users response = userService.update(userToUpdate, idToUpdate);
+        User response = userService.update(userToUpdate, idToUpdate);
     
         Assertions.assertEquals(response ,user);
     }

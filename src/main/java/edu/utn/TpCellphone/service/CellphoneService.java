@@ -1,6 +1,6 @@
 package edu.utn.TpCellphone.service;
 
-import edu.utn.TpCellphone.model.Cellphones;
+import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.repository.CellphoneRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +16,19 @@ public class CellphoneService {
     }
 
 
-    public Optional<Cellphones> getById(Integer id_cellphone) {
+    public Optional<Cellphone> getById(Integer id_cellphone) {
         return CELLPHONE_REPOSITORY.findById(id_cellphone);
     }
 
-    public void addClient(Cellphones newCellphone) {
+    public void addClient(Cellphone newCellphone) {
         CELLPHONE_REPOSITORY.save(newCellphone);
     }
 
-    public List<Cellphones> getAll() {
+    public List<Cellphone> getAll() {
         return CELLPHONE_REPOSITORY.findAll();
     }
 
-    public void delete(Cellphones cellphone) {
+    public void delete(Cellphone cellphone) {
         CELLPHONE_REPOSITORY.delete(cellphone);
     }
 }

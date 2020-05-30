@@ -1,6 +1,7 @@
 package edu.utn.TpCellphone.model;
 
 import lombok.*;
+import org.hibernate.query.criteria.internal.BasicPathUsageException;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,19 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Entity
-public class Cellphones {
+@Table(name = "Cellphones")
+public class Cellphone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_cellphone;
-    private int cellphone_number;
+    @Column(name = "id_cellphone")
+    private int idCellphone;
+    
+    @Column(name = "cellphone_number")
+    private int cellphoneNumber;
     
     private enum LineType {admin, client};
     @Enumerated(EnumType.STRING)
     private LineType line_type;
     
-    private int id_user;
-    
-    @OneToMany
-    @JoinColumn(name = "id_cellphone", referencedColumnName = "id_cellphone")
-    private List<Bills> billsList;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_user")
+    private User idUser;
 }

@@ -1,7 +1,8 @@
 package edu.utn.TpCellphone.controller;
 
 
-import edu.utn.TpCellphone.model.Cities;
+import edu.utn.TpCellphone.model.City;
+import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.CityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +32,9 @@ public class CityControllerTest {
     
     @Test
     public void getCityByIdTest() {
-        Cities city = new Cities(23, "posadas", 555, 4, null);
+        City city = new City(23, "posadas", 555, new Province());
         when(service.getById(1)).thenReturn(Optional.ofNullable(city));
-        Optional<Cities> response = cityController.getCityById(1);
+        Optional<City> response = cityController.getCityById(1);
     
         assertNotNull(response);
         assertEquals(city, response.get());
@@ -42,16 +43,16 @@ public class CityControllerTest {
     @Test
     public void nullGetCityByIdTest() {
         when(service.getById(1)).thenReturn(Optional.ofNullable(null));
-        Optional<Cities> response = cityController.getCityById(1);
+        Optional<City> response = cityController.getCityById(1);
         
         assertTrue(response.isEmpty());
     }
     
     @Test
     public void addCityTest() {
-        Cities city = new Cities(14, "La plata", 221, 1, null);
+        City city = new City(14, "La plata", 221, new Province());
         when(service.addCity(city)).thenReturn(city);
-        Cities response = cityController.addCity(city);
+        City response = cityController.addCity(city);
         
         assertNotNull(response);
         assertEquals(city, response);
@@ -59,14 +60,14 @@ public class CityControllerTest {
     
     @Test
     public void getAllTest() {
-        List<Cities> citiesList = new ArrayList<>();
-        Cities city1 = new Cities(14, "La plata", 221, 1, null);
-        Cities city2 = new Cities(23, "posadas", 555, 4, null);
+        List<City> citiesList = new ArrayList<>();
+        City city1 = new City(14, "La plata", 221, new Province());
+        City city2 = new City(23, "posadas", 555, new Province());
         citiesList.add(city1);
         citiesList.add(city2);
         
         when(service.getAll()).thenReturn(citiesList);
-        List<Cities> response = cityController.getAll();
+        List<City> response = cityController.getAll();
     
         assertNotNull(response);
         assertEquals(citiesList, response);
@@ -74,7 +75,7 @@ public class CityControllerTest {
     
     @Test
     public void deleteCityTest() {
-        Cities city = new Cities(14, "La plata", 221, 1, null);
+        City city = new City(14, "La plata", 221, new Province());
         doNothing().when(service).delete(city);
         cityController.deleteCity(city);
     
@@ -83,14 +84,14 @@ public class CityControllerTest {
     
     @Test
     public void updateTest() {
-        Cities updateCity = new Cities();
-        updateCity.setId_province(14);
+        City updateCity = new City();
         updateCity.setName("La plata");
         updateCity.setPrefix(221);
-        updateCity.setPrefix(1);
+        updateCity.setIdCity(1);
+        updateCity.setProvince(new Province(1, "Buenos Aires"));
         
         when(service.update(updateCity, 1)).thenReturn(updateCity);
-        Cities response = cityController.update(updateCity, 1);
+        City response = cityController.update(updateCity, 1);
         
         assertNotNull(response);
         assertEquals(updateCity, response);

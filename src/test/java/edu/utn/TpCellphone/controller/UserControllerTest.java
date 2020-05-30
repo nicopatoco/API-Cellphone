@@ -1,8 +1,6 @@
 package edu.utn.TpCellphone.controller;
 
-import edu.utn.TpCellphone.model.Cities;
-import edu.utn.TpCellphone.model.Users;
-import edu.utn.TpCellphone.service.CityService;
+import edu.utn.TpCellphone.model.User;
 import edu.utn.TpCellphone.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,9 +30,9 @@ public class UserControllerTest {
     
     @Test
     public void getUserByIdTest() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
         when(service.getById(1)).thenReturn(Optional.ofNullable(user));
-        Optional<Users> response = userController.getUserById(1);
+        Optional<User> response = userController.getUserById(1);
         
         assertNotNull(response);
         assertEquals(user, response.get());
@@ -43,16 +41,16 @@ public class UserControllerTest {
     @Test
     public void nullGetUserByIdTest() {
         when(service.getById(1)).thenReturn(Optional.ofNullable(null));
-        Optional<Users> response = userController.getUserById(1);
+        Optional<User> response = userController.getUserById(1);
         
         assertTrue(response.isEmpty());
     }
     
     @Test
     public void addUserTest() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
         when(service.addUser(user)).thenReturn(user);
-        Users response = userController.addUser(user);
+        User response = userController.addUser(user);
         
         assertNotNull(response);
         assertEquals(user, response);
@@ -60,14 +58,14 @@ public class UserControllerTest {
     
     @Test
     public void getAllTest() {
-        List<Users> usersList = new ArrayList<>();
-        Users user1 = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
-        Users user2 = new Users(1,"333","nico","herrera", "nicopatoco", "123abc", 1, null, null, null );
+        List<User> usersList = new ArrayList<>();
+        User user1 = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
+        User user2 = new User(1, "333", "nico", "herrera", "nicopatoco", "123abc", null, null);
         usersList.add(user1);
         usersList.add(user2);
         
         when(service.getAll("nico")).thenReturn(usersList);
-        List<Users> response = userController.getAll("nico");
+        List<User> response = userController.getAll("nico");
         
         assertNotNull(response);
         assertEquals(usersList, response);
@@ -75,14 +73,14 @@ public class UserControllerTest {
     
     @Test
     public void getAllTest2() {
-        List<Users> usersList = new ArrayList<>();
-        Users user1 = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
-        Users user2 = new Users(1,"333","nico","herrera", "nicopatoco", "123abc", 1, null, null, null );
+        List<User> usersList = new ArrayList<>();
+        User user1 = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
+        User user2 = new User(1, "333", "nico", "herrera", "nicopatoco", "123abc", null, null);
         usersList.add(user1);
         usersList.add(user2);
         
         when(service.getAll(null)).thenReturn(usersList);
-        List<Users> response = userController.getAll(null);
+        List<User> response = userController.getAll(null);
         
         assertNotNull(response);
         assertEquals(usersList, response);
@@ -90,7 +88,7 @@ public class UserControllerTest {
     
     @Test
     public void deleteCityTest() {
-        Users user = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
         doNothing().when(service).delete(user);
         userController.deleteUser(user);
         
@@ -99,9 +97,9 @@ public class UserControllerTest {
     
     @Test
     public void updateTest() {
-        Users userToUpdate = new Users(1,"123","juan","Perez", "juancioto", "123abc", 1, null, null, null );
+        User userToUpdate = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
         when(service.update(userToUpdate, 1)).thenReturn(userToUpdate);
-        Users response = userController.update(userToUpdate, 1);
+        User response = userController.update(userToUpdate, 1);
         
         assertNotNull(response);
         assertEquals(userToUpdate, response);
