@@ -3,6 +3,7 @@ package edu.utn.TpCellphone.controller;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class ProvinceController {
     }
     
     @GetMapping("/")
-    public List<Province> getAllProvince() {
+    public ResponseEntity<List<Province>> getAllProvince() {
         return PROVINCE_SERVICE.getAll();
     }
   
