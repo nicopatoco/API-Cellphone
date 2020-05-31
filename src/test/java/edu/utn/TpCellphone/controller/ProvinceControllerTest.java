@@ -3,7 +3,6 @@ package edu.utn.TpCellphone.controller;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.ProvinceService;
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
