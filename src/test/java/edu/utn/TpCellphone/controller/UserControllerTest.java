@@ -1,23 +1,22 @@
 package edu.utn.TpCellphone.controller;
 
+import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetUserReduce;
 import edu.utn.TpCellphone.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.mockito.stubbing.OngoingStubbing;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.BDDAssertions.then;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +29,9 @@ public class UserControllerTest {
     
     @Mock
     private UserService service;
+    
+    @Mock
+    private ResponseEntity<GetUserReduce> userReduce;
     
     @Test
     public void getUserByIdTest() {
@@ -51,12 +53,12 @@ public class UserControllerTest {
     
     @Test
     public void addUserTest() {
-        User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
-        when(service.addUser(user)).thenReturn(user);
-        User response = userController.addUser(user);
+        User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, new City(1, "mar del plata", 223, null));
+        when(service.addUser(user)).thenReturn(userReduce);
+        ResponseEntity<GetUserReduce> response = userController.addUser(user);
         
         assertNotNull(response);
-        assertEquals(user, response);
+        assertEquals(userReduce, response);
     }
     
     @Test

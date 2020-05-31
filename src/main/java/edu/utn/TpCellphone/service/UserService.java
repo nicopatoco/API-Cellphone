@@ -2,9 +2,12 @@ package edu.utn.TpCellphone.service;
 
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetUserReduce;
 import edu.utn.TpCellphone.repository.CityRepository;
 import edu.utn.TpCellphone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +27,11 @@ public class UserService {
         this.CITY_REPOSITORY = city_repository;
     }
 
-    public User addUser(User newUser) {
+    public ResponseEntity<GetUserReduce> addUser(User newUser) {
         Optional<City> city = CITY_REPOSITORY.findById(newUser.getCity().getIdCity());
         newUser.setCity(city.get());
-        return USER_REPOSITORY.save(newUser);
+        User userResponse = USER_REPOSITORY.save(newUser);
+        return this.getReduceUser(userResponse.getIdUser());
     }
 
     public Optional<User> getById(Integer id_user) {
@@ -60,5 +64,16 @@ public class UserService {
     public User login(String username, String password) {
         User user = USER_REPOSITORY.userExists(username, password);
         return Optional.ofNullable(user).orElseThrow(() -> new RuntimeException("User does not exists"));
+    }
+    
+    public ResponseEntity<GetUserReduce> getReduceUser(int idUser) {
+        ResponseEntity<GetUserReduce> response;
+        GetUserReduce user = USER_REPOSITORY.getUserById(idUser);
+        if (user != null) {
+            response = ResponseEntity.ok(user);
+        } else {
+            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return response;
     }
 }

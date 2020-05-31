@@ -1,8 +1,10 @@
 package edu.utn.TpCellphone.controller;
 
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetUserReduce;
 import edu.utn.TpCellphone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public User addUser(@RequestBody User newUsers) {
+    public ResponseEntity<GetUserReduce> addUser(@RequestBody User newUsers) {
         return USER_SERVICE.addUser(newUsers);
     }
 
@@ -48,5 +50,9 @@ public class UserController {
     public User login(@RequestParam String username, @RequestParam String password) {
         return USER_SERVICE.login(username, password);
     }
-
+    
+    @GetMapping("/projection/{idUser}")
+    public ResponseEntity<GetUserReduce> getUserReduce(@PathVariable Integer idUser) {
+        return USER_SERVICE.getReduceUser(idUser);
+    }
 }

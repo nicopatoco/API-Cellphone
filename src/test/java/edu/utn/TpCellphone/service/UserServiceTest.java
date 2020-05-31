@@ -3,6 +3,7 @@ package edu.utn.TpCellphone.service;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetUserReduce;
 import edu.utn.TpCellphone.repository.CityRepository;
 import edu.utn.TpCellphone.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +34,52 @@ public class UserServiceTest {
     
     @Mock
     private CityRepository cityRepository;
-
+    
+    @Mock
+    private ResponseEntity<GetUserReduce> userReduce;
+    
+    @Mock
+    private UserService mockService;
+    
+    @Mock
+    private GetUserReduce getUserReduce;
+    
     @Test
-    public void addClientTest() {
+    public void addUserTest() {
         User user = new User();
         user.setIdUser(1);
         user.setId("35885684");
         user.setName("nicolas");
         user.setName("surname");
         user.setCity(new City(1, "mar del plata", 223, new Province()));
-        when(repository.save(user)).thenReturn(user);
+    
         when(cityRepository.findById(user.getCity().getIdCity())).thenReturn(Optional.of(new City()));
-        User response = userService.addUser(user);
+        when(repository.save(user)).thenReturn(user);
+        when(mockService.getReduceUser(user.getIdUser())).thenReturn(userReduce);
+        when(repository.getUserById(user.getIdUser())).thenReturn(getUserReduce);
+        ResponseEntity<GetUserReduce> response = userService.addUser(user);
 
-        assertNotNull(response);
-        assertEquals(user, response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(getUserReduce, response.getBody());
+    }
+    
+    @Test
+    public void BadRequestaddUserTest() {
+        User user = new User();
+        user.setIdUser(1);
+        user.setId("35885684");
+        user.setName("nicolas");
+        user.setName("surname");
+        user.setCity(new City(1, "mar del plata", 223, new Province()));
+        
+        when(cityRepository.findById(user.getCity().getIdCity())).thenReturn(Optional.of(new City()));
+        when(repository.save(user)).thenReturn(user);
+        when(mockService.getReduceUser(user.getIdUser())).thenReturn(userReduce);
+        when(repository.getUserById(user.getIdUser())).thenReturn(null);
+        ResponseEntity<GetUserReduce> response = userService.addUser(user);
+        
+        assertEquals(400, response.getStatusCodeValue());
+        assertNull(response.getBody());
     }
 
     @Test
