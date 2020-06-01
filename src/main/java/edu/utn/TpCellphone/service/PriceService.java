@@ -4,6 +4,7 @@ import edu.utn.TpCellphone.model.Price;
 import edu.utn.TpCellphone.repository.PriceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,9 @@ public class PriceService {
     
     public Optional<Price> getById(Integer idPrice) {
         return PRICE_REPOSITORY.findById(idPrice);
+    }
+    
+    public List<Price> getAll() {
+        return PRICE_REPOSITORY.findAll();
     }
 }
