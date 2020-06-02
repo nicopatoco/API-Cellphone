@@ -46,4 +46,8 @@ public class CityService {
         cityToUpdate.setIdCity(city.getIdCity());
         return CITY_REPOSITORY.save(cityToUpdate);
     }
+    
+    public List<City> getCityBetween200And400() {
+        return CITY_REPOSITORY.getCityBetween200And400();
+    }
 }

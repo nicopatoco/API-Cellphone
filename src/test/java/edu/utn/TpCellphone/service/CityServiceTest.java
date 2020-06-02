@@ -93,4 +93,23 @@ public class CityServiceTest {
         
         Assertions.assertEquals(response ,city);
     }
+    
+    /**
+     * Test city service, this method should return a list of cities between 200 and 400 prefix.
+     */
+    @Test
+    public void cityBetween200and400Test() {
+        List<City> cityList = new ArrayList<>();
+        City city1 = new City(1,"mar del plata", 223, null);
+        City city2 = new City(1,"mar chiquita", 221, null);
+        City city3 = new City(1,"mar de las pampas", 222, null);
+        cityList.add(city1);
+        cityList.add(city2);
+        cityList.add(city3);
+        when(repository.getCityBetween200And400()).thenReturn(cityList);
+        List<City> response = cityService.getCityBetween200And400();
+        
+        assertNotNull(response);
+        assertEquals(cityList, response);
+    }
 }
