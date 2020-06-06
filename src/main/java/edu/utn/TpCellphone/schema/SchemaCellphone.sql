@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS Prices (
 
 CREATE TABLE IF NOT EXISTS Cellphones(
     id_cellphone     INT AUTO_INCREMENT,
-    cellphone_number INT NOT NULL UNIQUE,
+    cellphone_number VARCHAR(50) NOT NULL UNIQUE,
     line_type        ENUM("mobile", "home")NOT NULL,
     id_user INT NOT NULL,
     PRIMARY KEY(id_cellphone),
@@ -73,3 +73,14 @@ CREATE TABLE IF NOT EXISTS Calls (
     CONSTRAINT id_price_calls FOREIGN KEY(id_price)references Prices(id_price),
     CONSTRAINT id_bill_calls FOREIGN KEY(id_bill)references Bills(id_bill)
 );
+
+//DELIMITER
+CREATE TRIGGER tbi_cellphones before insert on cellphones FOR EACH ROW
+BEGIN
+    declare setPrefix int;
+    set setPrefix = 0;
+    select prefix into setPrefix from users u join cities c on c.id_city = u.id_city where id_user = new.id_user;
+    set new.cellphone_number = concat(setPrefix, new.cellphone_number);
+END//
+DELIMITER;
+
