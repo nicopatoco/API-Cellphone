@@ -1,6 +1,7 @@
 package edu.utn.TpCellphone.controller;
 
 
+import edu.utn.TpCellphone.exceptions.CityNotFoundException;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.CityService;
@@ -11,14 +12,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,5 +96,42 @@ public class CityControllerTest {
         
         assertNotNull(response);
         assertEquals(updateCity, response);
+    }
+    
+    /**
+     * Test city service, this method should return a list of cities between 200 and 400 prefix.
+     * inside a response entity
+     * status code 200
+     */
+    @Test
+    public void cityBetween200and400Test() throws CityNotFoundException {
+        List<City> cityList = new ArrayList<>();
+        City city1 = new City(1,"mar del plata", 223, null);
+        City city2 = new City(1,"mar chiquita", 221, null);
+        City city3 = new City(1,"mar de las pampas", 222, null);
+        cityList.add(city1);
+        cityList.add(city2);
+        cityList.add(city3);
+        
+        when(service.getCityBetween200And400()).thenReturn(cityList);
+        ResponseEntity<List<City>> response = cityController.getCityBetween200And400();
+        
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(cityList, response.getBody());
+    }
+    
+    /**
+     * Testing the exception case, and status code 400
+     */
+    @Test
+    public void wrongCityBetween200and400Test() throws CityNotFoundException {
+        List<City> cityList = new ArrayList<>();
+        
+        when(service.getCityBetween200And400()).thenReturn(cityList);
+        
+        assertThrows(CityNotFoundException.class, () -> {
+            ResponseEntity<List<City>> response = cityController.getCityBetween200And400();
+            assertEquals(400, response);
+        });
     }
 }
