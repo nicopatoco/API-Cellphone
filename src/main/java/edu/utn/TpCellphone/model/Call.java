@@ -24,6 +24,10 @@ public class Call {
     private Date endTime;
     @Column(name = "final_value")
     private Double finalValue;
+    @Column(name = "numberOrigin")
+    private String number_origin;
+    @Column(name = "numberDestination")
+    private String number_destination;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cellphone_origin")

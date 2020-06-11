@@ -1,10 +1,8 @@
 package edu.utn.TpCellphone.model;
 
 import lombok.*;
-import org.hibernate.query.criteria.internal.BasicPathUsageException;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @ToString
