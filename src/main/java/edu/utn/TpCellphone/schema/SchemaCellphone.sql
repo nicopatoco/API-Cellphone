@@ -93,9 +93,11 @@ END//
 DELIMITER
 
 CREATE TRIGGER tbi_calls before insert on calls FOR EACH ROW
-    BEGIN
+BEGIN
     declare set_price FLOAT;
     declare set_id_price int;
+    declare set_id_city_origin int;
+    declare set_id_city_destination int;
     IF (TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time) < 0) then
         signal sqlstate '10001'
         SET MESSAGE_TEXT = 'Wrong date, the call can not have a negative munutes call',
@@ -108,10 +110,17 @@ CREATE TRIGGER tbi_calls before insert on calls FOR EACH ROW
         SET MESSAGE_TEXT = 'Wrong number ',
         MYSQL_ERRNO = 2.2;
     END IF;
+    #i should find the cellphone id --> origin and destination
     set new.id_cellphone_origin = (select id_cellphone from cellphones where cellphone_number = new.number_origin);
     set new.id_cellphone_destination = (select id_cellphone from cellphones where cellphone_number = new.number_destination);
-
-    select price_per_minute, id_price into set_price, set_id_price  from prices where id_origin_city = new.id_cellphone_origin and id_destination_city = new.id_cellphone_destination;
+    #i should find the city id_origin
+    select id_city into set_id_city_origin from calls ca join cellphones ce on new.id_cellphone_origin = ce.id_cellphone
+    join users u on u.id_user = ce.id_user group by u.id_city limit 1;
+    #i should find the city id_destination
+    select id_city into set_id_city_destination from calls ca join cellphones ce on new.id_cellphone_destination = ce.id_cellphone
+    join users u on u.id_user = ce.id_user group by u.id_city limit 1;
+    #i calculate the final price and i get the id_price
+    select price_per_minute, id_price into set_price, set_id_price  from prices where id_origin_city = set_id_city_origin and id_destination_city = set_id_city_destination;
     set new.final_value = set_price * TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time);
     set new.id_price = set_id_price;
 END
