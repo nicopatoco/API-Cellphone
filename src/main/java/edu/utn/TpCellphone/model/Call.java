@@ -40,4 +40,8 @@ public class Call {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_price")
     private Cellphone idPrice;
+    
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "id_bill")
+    private Cellphone idBill;
 }
