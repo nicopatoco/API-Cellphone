@@ -39,7 +39,7 @@ public class PriceController {
     }
     
     @GetMapping("/")
-    public ResponseEntity<List<Price>> getAllProvince() throws PriceNotFoundException {
+    public ResponseEntity<List<Price>> getAllPrices() throws PriceNotFoundException {
         ResponseEntity<List<Price>> responseEntity;
         List<Price> price = PRICE_SERVICE.getAll();
         if (!price.isEmpty()) {
