@@ -92,6 +92,15 @@ BEGIN
 END//
 DELIMITER
 
+CREATE TRIGGER tbi_cellphones before insert on cellphones FOR EACH ROW
+BEGIN
+    declare setPrefix int;
+    set setPrefix = 0;
+    select prefix into setPrefix from users u join cities c on c.id_city = u.id_city where id_user = new.id_user;
+
+    set new.cellphone_number = concat(setPrefix, new.cellphone_number);
+END
+
 CREATE TRIGGER tbi_calls before insert on calls FOR EACH ROW
 BEGIN
     declare set_price FLOAT;
@@ -110,17 +119,85 @@ BEGIN
         SET MESSAGE_TEXT = 'Wrong number ',
         MYSQL_ERRNO = 2.2;
     END IF;
-    #i should find the cellphone id --> origin and destination
     set new.id_cellphone_origin = (select id_cellphone from cellphones where cellphone_number = new.number_origin);
     set new.id_cellphone_destination = (select id_cellphone from cellphones where cellphone_number = new.number_destination);
-    #i should find the city id_origin
-    select id_city into set_id_city_origin from calls ca join cellphones ce on new.id_cellphone_origin = ce.id_cellphone
-    join users u on u.id_user = ce.id_user group by u.id_city limit 1;
-    #i should find the city id_destination
-    select id_city into set_id_city_destination from calls ca join cellphones ce on new.id_cellphone_destination = ce.id_cellphone
-    join users u on u.id_user = ce.id_user group by u.id_city limit 1;
-    #i calculate the final price and i get the id_price
+
+    select u.id_city into set_id_city_origin from cellphones ce
+    join users u on u.id_user = ce.id_user
+    where ce.id_cellphone = new.id_cellphone_origin;
+
+    select u.id_city into set_id_city_destination from cellphones ce
+    join users u on u.id_user = ce.id_user
+    where ce.id_cellphone = new.id_cellphone_destination;
+
     select price_per_minute, id_price into set_price, set_id_price  from prices where id_origin_city = set_id_city_origin and id_destination_city = set_id_city_destination;
     set new.final_value = set_price * TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time);
     set new.id_price = set_id_price;
 END
+
+# 1 of month , execute method sp_invoicing() -> the calls that are not invoicing, generate an new bill with 15 days used.
+CREATE PROCEDURE sp_invoicing()
+begin
+    declare stop_cursor_one, stop_cursor_two BOOLEAN default false;
+    declare set_id_user int;
+    declare set_id_cellphone int;
+    declare set_total_price int;
+    declare set_amount_calls int;
+    declare set_id_bills int;
+    declare set_id_call int;
+
+    declare bill_cursor cursor for
+    select ce.id_user, ce.id_cellphone, sum(ca.final_value) as total_price, count(ca.id_call) as amount_calls
+    from cellphones ce inner join calls ca on ce.id_cellphone = ca.id_cellphone_origin
+    where ca.id_bill is null
+    group  by ce.id_cellphone;
+
+    declare continue HANDLER for not found set  stop_cursor_one = true;
+    open bill_cursor;
+    set_Bills : LOOP
+    fetch bill_cursor into set_id_user, set_id_cellphone, set_total_price, set_amount_calls;
+        if stop_cursor_one THEN
+            close bill_cursor;
+            LEAVE set_Bills;
+        END IF;
+        #Insert bills for cellphones
+        insert into bills
+        (id_cellphone, id_user, amount_of_calls, final_price, bill_date, due_date)
+        values (set_id_cellphone, set_id_user, set_amount_calls, set_total_price, now(), now() + interval 15 day);
+        set set_id_bills = last_insert_id();
+
+        BLOCK2: BEGIN
+        #update call with the generated bill
+        declare call_cursor cursor for
+        select ca.id_call from calls ca
+        where ca.id_cellphone_origin = set_id_cellphone;
+
+        declare continue HANDLER for not found set  stop_cursor_two = true;
+        open call_cursor;
+        set_calls : LOOP
+        fetch call_cursor into set_id_call;
+            if stop_cursor_two THEN
+                #when you itarates more than once you should restart the cursor.
+                set stop_cursor_two = false;
+                close call_cursor;
+                LEAVE set_calls;
+            END IF;
+            update calls set id_bill = set_id_bills where id_call = set_id_call and id_bill is null;
+            END LOOP set_calls;
+        END BLOCK2;
+    END LOOP set_Bills;
+END
+
+CREATE PROCEDURE debug_msg(enabled INTEGER, msg VARCHAR(255))
+BEGIN
+    IF enabled THEN
+        select concat('** ', msg) AS '** DEBUG:';
+    END IF;
+END
+
+CREATE EVENT IF NOT EXISTS sp_invoicing
+    ON SCHEDULE EVERY '1' MONTH
+STARTS '2020-06-1 00:00:00'
+    ON COMPLETION PRESERVE
+DO
+    call sp_invoicing ();
