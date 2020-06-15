@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS Calls
     id_bill                  INT,
     start_time               DATETIME    NOT NULL,
     end_time                 DATETIME    NOT NULL,
+    duration                 INT,
     final_value              FLOAT,
     number_origin            varchar(50) NOT NULL,
     number_destination       varchar(50) NOT NULL,
@@ -119,6 +120,7 @@ BEGIN
     DECLARE set_id_price INT;
     DECLARE set_id_city_origin INT;
     DECLARE set_id_city_destination INT;
+
     IF (TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time) < 0) THEN
         SIGNAL SQLSTATE '10001'
             SET MESSAGE_TEXT = 'Wrong date, the call can not have a negative munutes call',
@@ -153,7 +155,8 @@ BEGIN
     FROM prices
     WHERE id_origin_city = set_id_city_origin
       AND id_destination_city = set_id_city_destination;
-    SET new.final_value = set_price * TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time);
+    SET new.duration = TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time);
+    SET new.final_value = set_price * new.duration;
     SET new.id_price = set_id_price;
 END
 $$
