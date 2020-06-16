@@ -1,16 +1,16 @@
 package edu.utn.TpCellphone.controller;
 
+import edu.utn.TpCellphone.dto.CallAddDto;
 import edu.utn.TpCellphone.dto.CallDto;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.model.Call;
 import edu.utn.TpCellphone.service.CallService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -25,15 +25,37 @@ public class CallController {
     @GetMapping("/{idCall}")
     public ResponseEntity<CallDto> getCallById(@PathVariable Integer idCall) throws CallNotFoundException {
         Optional<Call> call = CALL_SERVICE.getById(idCall);
-        System.out.println(call);
+        System.out.println(call.get().getEndTime());
         ResponseEntity<CallDto> responseEntity;
         if (!call.isEmpty()) {
-            CallDto callDto = new CallDto(call.get().getStartTime(), call.get().getEndTime(), call.get().getNumber_origin(), call.get().getNumber_destination());
+            CallDto callDto = new CallDto(call.get().getNumberOrigin(), call.get().getNumberDestination(), call.get().getDuration());
             responseEntity = ResponseEntity.ok(callDto);
         } else {
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             throw new CallNotFoundException();
         }
         return responseEntity;
+    }
+    
+    @GetMapping("/")
+    public ResponseEntity<List<CallDto>> getAllCalls() throws CallNotFoundException {
+        List<Call> calls = CALL_SERVICE.getAll();
+        ResponseEntity<List<CallDto>> responseEntity;
+        if (!calls.isEmpty()) {
+            List<CallDto> callsDto = new ArrayList<>();
+            for (Call c : calls) {
+                callsDto.add(new CallDto(c.getNumberOrigin(), c.getNumberDestination(), c.getDuration()));
+            }
+            responseEntity = ResponseEntity.ok(callsDto);
+        } else {
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new CallNotFoundException();
+        }
+        return responseEntity;
+    }
+    
+    @PostMapping("/")
+    public void addCall(@RequestBody CallAddDto call) {
+        CALL_SERVICE.addCall(call);
     }
 }
