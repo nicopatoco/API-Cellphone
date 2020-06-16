@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +58,14 @@ public class CallController {
     }
     
     @PostMapping("/")
-    public void addCall(@RequestBody CallAddDto call) throws SQLException {
+    public ResponseEntity addCall(@RequestBody CallAddDto call) throws SQLException {
         try{
+            URI local = new URI("localhost:8080/call/");
             CALL_SERVICE.addCall(call);
-        } catch (SQLException e) {
-            e.getMessage();
+            return ResponseEntity.created(local).body(call);
+            
+        } catch (SQLException | URISyntaxException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
