@@ -1,5 +1,6 @@
 package edu.utn.TpCellphone.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,7 +23,11 @@ public class Bill {
     private int amountOfCalls;
     @Column(name = "final_price")
     private double finalPrice;
+    @Column(name = "bill_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date billDate;
     @Column(name = "due_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dueDate;
     
     @ManyToOne(optional = false)
