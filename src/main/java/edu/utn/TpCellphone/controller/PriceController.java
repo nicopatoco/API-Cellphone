@@ -2,7 +2,6 @@ package edu.utn.TpCellphone.controller;
 
 import edu.utn.TpCellphone.exceptions.PriceNotFoundException;
 import edu.utn.TpCellphone.model.Price;
-import edu.utn.TpCellphone.model.User;
 import edu.utn.TpCellphone.service.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/cellphones")
+@RequestMapping("/cellphone")
 public class CellphoneController {
     private final CellphoneService CELLPHONE_SERVICE;
 
