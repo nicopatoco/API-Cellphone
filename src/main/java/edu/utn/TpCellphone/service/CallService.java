@@ -5,6 +5,7 @@ import edu.utn.TpCellphone.model.Call;
 import edu.utn.TpCellphone.repository.CallRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class CallService {
         return CALL_REPOSITORY.findAll();
     }
     
-    public void addCall(CallAddDto callDto) {
+    public void addCall(CallAddDto callDto) throws SQLException {
         CALL_REPOSITORY.addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
     }
 }

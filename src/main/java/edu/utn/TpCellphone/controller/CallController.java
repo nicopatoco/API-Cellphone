@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,11 @@ public class CallController {
     }
     
     @PostMapping("/")
-    public void addCall(@RequestBody CallAddDto call) {
-        CALL_SERVICE.addCall(call);
+    public void addCall(@RequestBody CallAddDto call) throws SQLException {
+        try{
+            CALL_SERVICE.addCall(call);
+        } catch (SQLException e) {
+            e.getMessage();
+        }
     }
 }
