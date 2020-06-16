@@ -5,19 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class CallDto {
-    
     @JsonProperty
-    private Date startTime;
+    private String numberOrigin;
     @JsonProperty
-    private Date endTime;
+    private String numberDestination;
     @JsonProperty
-    private String number_origin;
-    @JsonProperty
-    private String number_destination;
+    private int duration;
 }
