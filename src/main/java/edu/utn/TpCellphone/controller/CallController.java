@@ -63,7 +63,6 @@ public class CallController {
             URI local = new URI("localhost:8080/call/");
             CALL_SERVICE.addCall(call);
             return ResponseEntity.created(local).body(call);
-            
         } catch (SQLException | URISyntaxException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
