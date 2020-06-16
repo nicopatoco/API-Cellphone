@@ -18,11 +18,12 @@ public class Cellphone {
     private int idCellphone;
     
     @Column(name = "cellphone_number")
-    private int cellphoneNumber;
+    private String cellphoneNumber;
     
-    private enum LineType {admin, client};
+    private enum LineType {mobile, home};
     @Enumerated(EnumType.STRING)
-    private LineType line_type;
+    @Column(name = "line_type")
+    private LineType lineType;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_user")
