@@ -78,7 +78,6 @@ public class UserService {
         return response;
     }
 
-
     public List<GetUserTop10Destinations> getTop10DestinationUserById(Integer idClient) {
         return USER_REPOSITORY.getTop10DestinationUserById(idClient);
     }
@@ -90,5 +89,4 @@ public class UserService {
     public List<GetBill> getBillsByRangeDate(Integer idClient, Date dateFrom, Date dateTo) {
         return USER_REPOSITORY.getBillsByRangeDate(idClient, dateFrom, dateTo);
     }
-
 }
