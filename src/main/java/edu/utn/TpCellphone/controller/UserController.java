@@ -76,9 +76,7 @@ public class UserController {
         }
         return responseEntity;
     }
-
-
-
+    
     //GET CALLS OF X USER BETWEEN RANGE OF DATES
     @GetMapping("/{idClient}/calls/dateFrom/{dateFrom}/dateTo/{dateTo}")
     public ResponseEntity<List<GetCall>> getCallsByRangeDate(@PathVariable Integer idClient, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo) throws CallNotFoundException {
