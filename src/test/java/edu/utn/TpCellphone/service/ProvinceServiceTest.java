@@ -69,6 +69,12 @@ public class ProvinceServiceTest {
 
         assertEquals(200, responseList.getStatusCodeValue());
         assertEquals(provincesList, responseList.getBody());
+    
+        when(repository.findAll()).thenReturn(null);
+        ResponseEntity<List<Province>> response = provinceService.getAll();
+        
+        assertEquals(404, response.getStatusCodeValue());
+        assertEquals(null, response.getBody());
     }
 
     @Test

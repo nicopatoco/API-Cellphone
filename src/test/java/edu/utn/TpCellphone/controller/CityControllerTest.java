@@ -118,6 +118,7 @@ public class CityControllerTest {
         
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(cityList, response.getBody());
+        assertTrue(!city1.toString().isEmpty());
     }
     
     /**

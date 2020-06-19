@@ -3,7 +3,10 @@ package edu.utn.TpCellphone.service;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetBill;
+import edu.utn.TpCellphone.projections.GetCall;
 import edu.utn.TpCellphone.projections.GetUserReduce;
+import edu.utn.TpCellphone.projections.GetUserTop10Destinations;
 import edu.utn.TpCellphone.repository.CityRepository;
 import edu.utn.TpCellphone.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +20,7 @@ import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +47,15 @@ public class UserServiceTest {
     
     @Mock
     private GetUserReduce getUserReduce;
+    
+    @Mock
+    private List<GetUserTop10Destinations> getUserTop10Destinations;
+    
+    @Mock
+    private List<GetCall> getCalls;
+    
+    @Mock
+    private List<GetBill> getBills;
     
     @Test
     public void addUserTest() {
@@ -166,5 +179,37 @@ public class UserServiceTest {
         assertThrows(RuntimeException.class, () -> {
             userService.login(username, password);
         });
+    }
+    
+    @Test
+    public void getTop10DestinationUserByIdTest() {
+        when(repository.getTop10DestinationUserById(1)).thenReturn(getUserTop10Destinations);
+        List<GetUserTop10Destinations> response = userService.getTop10DestinationUserById(1);
+        
+        assertEquals(getUserTop10Destinations, response);
+    }
+    
+    @Test
+    public void getCallsByRangeDateTest() {
+        Date date1 = new Date();
+        Date date2 = new Date();
+        date1.setTime(1111111111);
+        date2.setTime(1222222222);
+        when(repository.getCallsByRangeDate(1,date1, date2)).thenReturn(getCalls);
+        List<GetCall> response = userService.getCallsByRangeDate(1,date1, date2);
+        
+        assertEquals(getCalls, response);
+    }
+    
+    @Test
+    public void getBillsByRangeDateTest() {
+        Date date1 = new Date();
+        Date date2 = new Date();
+        date1.setTime(1111111111);
+        date2.setTime(1222222222);
+        when(repository.getBillsByRangeDate(1,date1, date2)).thenReturn(getBills);
+        List<GetBill> response = userService.getBillsByRangeDate(1,date1, date2);
+        
+        assertEquals(getBills, response);
     }
 }
