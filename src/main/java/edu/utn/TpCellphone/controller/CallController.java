@@ -28,7 +28,6 @@ public class CallController {
     @GetMapping("/{idCall}")
     public ResponseEntity<CallDto> getCallById(@PathVariable Integer idCall) throws CallNotFoundException {
         Optional<Call> call = CALL_SERVICE.getById(idCall);
-        System.out.println(call.get().getEndTime());
         ResponseEntity<CallDto> responseEntity;
         if (!call.isEmpty()) {
             CallDto callDto = new CallDto(call.get().getNumberOrigin(), call.get().getNumberDestination(), call.get().getDuration());
@@ -58,7 +57,7 @@ public class CallController {
     }
     
     @PostMapping("/")
-    public ResponseEntity addCall(@RequestBody CallAddDto call) throws SQLException {
+    public ResponseEntity addCall(@RequestBody CallAddDto call) {
         try{
             URI local = new URI("localhost:8080/call/");
             CALL_SERVICE.addCall(call);
