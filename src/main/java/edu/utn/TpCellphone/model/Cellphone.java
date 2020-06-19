@@ -20,12 +20,12 @@ public class Cellphone {
     @Column(name = "cellphone_number")
     private String cellphoneNumber;
     
-    private enum LineType {mobile, home};
+    public enum LineType {mobile, home};
     @Enumerated(EnumType.STRING)
     @Column(name = "line_type")
     private LineType lineType;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_user")
-    private User idUser;
+    private User user;
 }

@@ -20,7 +20,7 @@ public class CellphoneService {
         return CELLPHONE_REPOSITORY.findById(id_cellphone);
     }
 
-    public void addClient(Cellphone newCellphone) {
+    public void addCellphone(Cellphone newCellphone) {
         CELLPHONE_REPOSITORY.save(newCellphone);
     }
 

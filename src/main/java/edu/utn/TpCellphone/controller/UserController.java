@@ -67,7 +67,6 @@ public class UserController {
     public ResponseEntity<List<GetUserTop10Destinations>> getTop10DestinationUserById(@PathVariable Integer idClient) throws CallNotFoundException {
         List<GetUserTop10Destinations> calls = USER_SERVICE.getTop10DestinationUserById(idClient);
         ResponseEntity<List<GetUserTop10Destinations>> responseEntity;
-
         if(!calls.isEmpty()){
             responseEntity = ResponseEntity.ok(calls);
         } else {
@@ -82,7 +81,6 @@ public class UserController {
     public ResponseEntity<List<GetCall>> getCallsByRangeDate(@PathVariable Integer idClient, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo) throws CallNotFoundException {
         List<GetCall> calls = USER_SERVICE.getCallsByRangeDate(idClient, dateFrom, dateTo);
         ResponseEntity<List<GetCall>> responseEntity;
-
         if(!calls.isEmpty()){
             responseEntity = ResponseEntity.ok(calls);
         } else {
@@ -97,7 +95,6 @@ public class UserController {
     public ResponseEntity<List<GetBill>> getBillsByRangeDate(@PathVariable Integer idClient, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFrom, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateTo) throws BillNotFoundException {
         List<GetBill> calls = USER_SERVICE.getBillsByRangeDate(idClient, dateFrom, dateTo);
         ResponseEntity<List<GetBill>> responseEntity;
-
         if(!calls.isEmpty()){
             responseEntity = ResponseEntity.ok(calls);
         } else {

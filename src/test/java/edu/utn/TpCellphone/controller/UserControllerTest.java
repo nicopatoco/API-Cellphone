@@ -1,8 +1,13 @@
 package edu.utn.TpCellphone.controller;
 
+import edu.utn.TpCellphone.exceptions.BillNotFoundException;
+import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetBill;
+import edu.utn.TpCellphone.projections.GetCall;
 import edu.utn.TpCellphone.projections.GetUserReduce;
+import edu.utn.TpCellphone.projections.GetUserTop10Destinations;
 import edu.utn.TpCellphone.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,10 +18,9 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,10 +37,19 @@ public class UserControllerTest {
     @Mock
     private ResponseEntity<GetUserReduce> userReduce;
     
+    @Mock
+    private List<GetUserTop10Destinations> calls;
+    
+    @Mock()
+    private List<GetCall> getCallProjections;
+    
+    @Mock()
+    private List<GetBill> getBillProjections;
+    
     @Test
     public void getUserByIdTest() {
         User user = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
-        when(service.getById(1)).thenReturn(Optional.ofNullable(user));
+        when(service.getById(1)).thenReturn(ofNullable(user));
         Optional<User> response = userController.getUserById(1);
         
         assertNotNull(response);
@@ -45,7 +58,7 @@ public class UserControllerTest {
     
     @Test
     public void nullGetUserByIdTest() {
-        when(service.getById(1)).thenReturn(Optional.ofNullable(null));
+        when(service.getById(1)).thenReturn(ofNullable(null));
         Optional<User> response = userController.getUserById(1);
         
         assertTrue(response.isEmpty());
@@ -89,6 +102,7 @@ public class UserControllerTest {
         
         assertNotNull(response);
         assertEquals(usersList, response);
+        assertTrue(!user1.toString().isEmpty());
     }
     
     @Test
@@ -136,6 +150,71 @@ public class UserControllerTest {
         
         assertThrows(RuntimeException.class, () -> {
             userController.login(username, password);
+        });
+    }
+    
+    @Test()
+    public void getUserReduceTest() {
+        when(service.getReduceUser(1)).thenReturn(userReduce);
+        ResponseEntity<GetUserReduce> response = userController.getUserReduce(1);
+        
+        assertEquals(userReduce, response);
+    }
+    
+    @Test
+    public void topTenCallsTest() throws CallNotFoundException {
+        User user = new User(1, "35885684", "Nicolas", "Herrera", "nicopatoco", "acb123", User.UserType.client, new City());
+        when(service.getTop10DestinationUserById(user.getIdUser())).thenReturn(this.calls);
+        ResponseEntity<List<GetUserTop10Destinations>> response = userController.getTop10DestinationUserById(user.getIdUser());
+        
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(this.calls, response.getBody());
+        
+        List<GetUserTop10Destinations> list = new ArrayList<>();
+        when(service.getTop10DestinationUserById(user.getIdUser())).thenReturn(list);
+        
+        assertThrows(CallNotFoundException.class, () -> {
+            userController.getTop10DestinationUserById(user.getIdUser());
+        });
+    }
+    
+    @Test
+    public void getCallsByRangeDateTest() throws CallNotFoundException {
+        Date date1 = new Date();
+        Date date2 = new Date();
+        date1.setTime(1111111111);
+        date2.setTime(1222222222);
+        when(service.getCallsByRangeDate(1, date1, date2)).thenReturn(getCallProjections);
+        ResponseEntity<List<GetCall>> response = userController.getCallsByRangeDate(1, date1, date2);
+        
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(this.getCallProjections, response.getBody());
+        
+        List<GetCall> getCalls = new ArrayList<>();
+        when(service.getCallsByRangeDate(1, new Date(), new Date())).thenReturn(getCalls);
+    
+        assertThrows(CallNotFoundException.class, () -> {
+            userController.getCallsByRangeDate(1, new Date(), new Date());
+        });
+    }
+    
+    @Test
+    public void getBillsByRangeDateTest() throws BillNotFoundException {
+        Date date1 = new Date();
+        Date date2 = new Date();
+        date1.setTime(1111111111);
+        date2.setTime(1222222222);
+        when(service.getBillsByRangeDate(1, date1, date2)).thenReturn(getBillProjections);
+        ResponseEntity<List<GetBill>> response = userController.getBillsByRangeDate(1, date1, date2);
+        
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(this.getBillProjections, response.getBody());
+        
+        List<GetBill> getBills = new ArrayList<>();
+        when(service.getBillsByRangeDate(1, new Date(), new Date())).thenReturn(getBills);
+        
+        assertThrows(BillNotFoundException.class, () -> {
+            userController.getBillsByRangeDate(1, new Date(), new Date());
         });
     }
 }
