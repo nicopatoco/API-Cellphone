@@ -97,4 +97,21 @@ public class UserController {
         }
         return responseEntity;
     }
+
+
+    public ResponseEntity<List<GetCall>> getCallsByUserId(Integer idClient) throws CallNotFoundException {
+        List<GetCall> calls = USER_SERVICE.getCallsByUserId(idClient);
+        ResponseEntity<List<GetCall>> responseEntity;
+
+        if (!calls.isEmpty()) {
+            responseEntity = ResponseEntity.ok(calls);
+        } else {
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new CallNotFoundException();
+        }
+        return responseEntity;
+    }
+
+
+
 }

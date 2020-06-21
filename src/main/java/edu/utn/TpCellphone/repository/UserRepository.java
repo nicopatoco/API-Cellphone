@@ -37,4 +37,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "       JOIN cellphones c on b.id_cellphone = c.id_cellphone" +
             "       WHERE u.id_user = ?1 AND (b.bill_date BETWEEN ?2 AND ?3)", nativeQuery = true)
     List<GetBill> getBillsByRangeDate(Integer idClient, Date dateFrom, Date dateTo);
+
+    @Query(value = "SELECT ca.number_origin as numberOrigin, ca.number_destination as numberDestination, ca.duration as duration FROM users as u " +
+            "       JOIN cellphones as ce ON u.id_user = ce.id_user" +
+            "       JOIN calls as ca ON ca.id_cellphone_origin = ce.id_cellphone" +
+            "       WHERE u.id_user = ?1", nativeQuery = true)
+    List<GetCall> getCallsByUserId(Integer idClient);
 }

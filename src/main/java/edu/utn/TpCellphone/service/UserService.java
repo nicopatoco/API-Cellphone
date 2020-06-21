@@ -101,4 +101,7 @@ public class UserService {
         return String.format("%1$032X", i);
     }
 
+    public List<GetCall> getCallsByUserId(Integer idClient) {
+        return USER_REPOSITORY.getCallsByUserId(idClient);
+    }
 }

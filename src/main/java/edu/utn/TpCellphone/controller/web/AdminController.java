@@ -3,11 +3,13 @@ package edu.utn.TpCellphone.controller.web;
 import edu.utn.TpCellphone.controller.*;
 import edu.utn.TpCellphone.dto.LoginRequestDto;
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
+import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.exceptions.PriceNotFoundException;
 import edu.utn.TpCellphone.model.Bill;
 import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.Price;
 import edu.utn.TpCellphone.model.User;
+import edu.utn.TpCellphone.projections.GetCall;
 import edu.utn.TpCellphone.projections.GetUserReduce;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +83,11 @@ public class AdminController {
         return this.userController.update(user, idUser);
     }
 
-    // TODO: hacer consulta de llamadas por usuario en controller
+    @GetMapping("/user/{idUser}/calls")
+    public ResponseEntity<List<GetCall>> getCallsByUserId(@PathVariable Integer idUser) throws CallNotFoundException {
+        return this.userController.getCallsByUserId(idUser);
+    }
+
 
     /**
      * CELLPHONE
@@ -120,6 +126,7 @@ public class AdminController {
     public ResponseEntity<Price> getPriceById(@PathVariable Integer idPrice) throws PriceNotFoundException {
         return this.priceController.getPriceById(idPrice);
     }
+
 
     /**
      * BILL
