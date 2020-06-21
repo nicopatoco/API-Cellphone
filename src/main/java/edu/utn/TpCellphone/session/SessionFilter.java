@@ -26,10 +26,8 @@ public class SessionFilter extends OncePerRequestFilter {
         Session session = sessionManager.getSession(sessionToken);
         if (null != session) {
             filterChain.doFilter(request, response);
-            System.out.println("------------------------------------------------------IN SESSION");
         } else {
             response.setStatus(HttpStatus.FORBIDDEN.value());
-            System.out.println("------------------------------------------------------IN SESSION");
         }
     }
 }

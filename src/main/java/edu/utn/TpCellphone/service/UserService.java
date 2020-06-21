@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -50,20 +53,20 @@ public class UserService {
         USER_REPOSITORY.delete(users);
     }
 
-    public User update(User user, int id_user) {
+    public User update(User user, int id_user) throws NoSuchAlgorithmException {
         User userToUpdate = USER_REPOSITORY.getOne(id_user);
         userToUpdate.getCity().setIdCity(user.getCity().getIdCity());
         userToUpdate.setId(user.getId());
         userToUpdate.setName(user.getName());
         userToUpdate.setSurname(user.getSurname());
         userToUpdate.setUsername(user.getUsername());
-        userToUpdate.setPassword(user.getPassword());
+        userToUpdate.setPassword(this.hashPass(user.getPassword()));
         userToUpdate.setUserType(user.getUserType());
         return USER_REPOSITORY.save(userToUpdate);
     }
 
-    public User login(String username, String password) {
-        User user = USER_REPOSITORY.userExists(username, password);
+    public User login(String username, String password, String type) throws NoSuchAlgorithmException {
+        User user = USER_REPOSITORY.userExists(username, this.hashPass(password), type);
         return Optional.ofNullable(user).orElseThrow(() -> new RuntimeException("User does not exists"));
     }
 
@@ -89,4 +92,13 @@ public class UserService {
     public List<GetBill> getBillsByRangeDate(Integer idClient, Date dateFrom, Date dateTo) {
         return USER_REPOSITORY.getBillsByRangeDate(idClient, dateFrom, dateTo);
     }
+
+    protected String hashPass(String pass) throws NoSuchAlgorithmException {
+        MessageDigest m = MessageDigest.getInstance("MD5");
+        byte[] data = pass.getBytes();
+        m.update(data, 0, data.length);
+        BigInteger i = new BigInteger(1, m.digest());
+        return String.format("%1$032X", i);
+    }
+
 }

@@ -23,7 +23,7 @@ public class User {
     private String username;
     private String password;
     
-    private enum UserType {admin, client};
+    private enum UserType {admin, client, antenna};
     
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")

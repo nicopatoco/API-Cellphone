@@ -15,15 +15,25 @@ public class Configuration {
     
     @Autowired
     SessionFilter sessionFilter;
-    
+
     @Bean
-    public FilterRegistrationBean myFilter() {
+    public FilterRegistrationBean adminFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(sessionFilter);
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/admin/*");
         return registration;
     }
-    
+
+    @Bean
+    public FilterRegistrationBean clientFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(sessionFilter);
+        registration.addUrlPatterns("/client/*");
+        return registration;
+    }
+
+
+
    /*@Bean
     public CacheManager cacheManager() {
         // configure and return an implementation of Spring's CacheManager SPI
@@ -31,6 +41,6 @@ public class Configuration {
         cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default")));
         return cacheManager;
     }
-    
+
     */
 }
