@@ -18,7 +18,12 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 
-import java.util.*;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
 
 import static java.util.Optional.ofNullable;
 import static org.junit.Assert.assertTrue;
@@ -115,7 +120,7 @@ public class UserControllerTest {
     }
     
     @Test
-    public void updateTest() {
+    public void updateTest() throws NoSuchAlgorithmException {
         User userToUpdate = new User(1, "123", "juan", "Perez", "juancioto", "123abc", null, null);
         when(service.update(userToUpdate, 1)).thenReturn(userToUpdate);
         User response = userController.update(userToUpdate, 1);
@@ -125,31 +130,33 @@ public class UserControllerTest {
     }
     
     @Test
-    public void loginTest() {
+    public void loginTest() throws NoSuchAlgorithmException {
         User user = new User();
-        String username = "nicopatoco";
-        String password = "abc123";
+        String username = "jdromerorajoy";
+        String password = "12345678";
+        String type = "client";
         user.setUsername(username);
         user.setPassword(password);
-        when(service.login(username, password)).thenReturn(user);
-        User response = userController.login(username, password);
+        when(service.login(username, password, type)).thenReturn(user);
+        User response = userController.login(username, password, type);
         
         assertNotNull(response);
         assertEquals(user, response);
-        verify(service, times(1)).login(username, password);
+        verify(service, times(1)).login(username, password, type);
     }
     
     @Test()
-    public void ExceptionLoginTest() {
+    public void ExceptionLoginTest() throws NoSuchAlgorithmException {
         User user = new User();
         String username = "nicopatoco";
         String password = "abc123";
+        String type = "admin";
         user.setUsername(username);
         user.setPassword(password);
-        doThrow(new RuntimeException("User does not exists")).when(service).login(username, password);
+        doThrow(new RuntimeException("User does not exists")).when(service).login(username, password, type);
         
         assertThrows(RuntimeException.class, () -> {
-            userController.login(username, password);
+            userController.login(username, password, type);
         });
     }
     

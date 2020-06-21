@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.http.ResponseEntity;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,7 +142,7 @@ public class UserServiceTest {
     }
     
     @Test
-    public void updateTest() {
+    public void updateTest() throws NoSuchAlgorithmException {
         User user = new User(1,"333","nico","herrera", "nicopatoco", "123abc", null, new City());
         User userToUpdate = new User(1,"123","juan","Perez", "juancioto", "123abc", null, new City());
         int idToUpdate = 1;
@@ -154,14 +155,16 @@ public class UserServiceTest {
     }
     
     @Test
-    public void loginTest() {
+    public void loginTest() throws NoSuchAlgorithmException {
+
         User user = new User();
         String username = "nicopatoco";
         String password = "abc123";
+        String type = "admin";
         user.setUsername(username);
         user.setPassword(password);
-        when(repository.userExists(username, password)).thenReturn(user);
-        User response = userService.login(username, password);
+        when(repository.userExists(username, userService.hashPass(password), type)).thenReturn(user);
+        User response = userService.login(username, password, type);
         
         assertNotNull(response);
         assertEquals(user, response);
@@ -172,12 +175,13 @@ public class UserServiceTest {
         User user = new User();
         String username = "nicopatoco";
         String password = "abc123";
+        String type = "admin";
         user.setUsername(username);
         user.setPassword(password);
-        when(repository.userExists(username, password)).thenReturn(null);
+        when(repository.userExists(username, password, type)).thenReturn(null);
         
         assertThrows(RuntimeException.class, () -> {
-            userService.login(username, password);
+            userService.login(username, password, type);
         });
     }
     
