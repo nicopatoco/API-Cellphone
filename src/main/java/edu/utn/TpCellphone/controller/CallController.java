@@ -27,7 +27,6 @@ public class CallController {
 
     public ResponseEntity<CallDto> getCallById(Integer idCall) throws CallNotFoundException {
         Optional<Call> call = CALL_SERVICE.getById(idCall);
-        System.out.println(call.get().getEndTime());
         ResponseEntity<CallDto> responseEntity;
         if (!call.isEmpty()) {
             CallDto callDto = new CallDto(call.get().getNumberOrigin(), call.get().getNumberDestination(), call.get().getDuration());
@@ -55,7 +54,6 @@ public class CallController {
         }
         return responseEntity;
     }
-
 
     public ResponseEntity addCall(CallAddDto call) throws SQLException {
         try {

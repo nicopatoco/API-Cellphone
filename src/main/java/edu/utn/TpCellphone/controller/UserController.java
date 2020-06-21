@@ -61,6 +61,7 @@ public class UserController {
         ResponseEntity<List<GetUserTop10Destinations>> responseEntity;
 
         if (!calls.isEmpty()) {
+
             responseEntity = ResponseEntity.ok(calls);
         } else {
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -74,6 +75,7 @@ public class UserController {
         ResponseEntity<List<GetCall>> responseEntity;
 
         if (!calls.isEmpty()) {
+
             responseEntity = ResponseEntity.ok(calls);
         } else {
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -87,6 +89,7 @@ public class UserController {
         ResponseEntity<List<GetBill>> responseEntity;
 
         if (!calls.isEmpty()) {
+
             responseEntity = ResponseEntity.ok(calls);
         } else {
             responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).build();

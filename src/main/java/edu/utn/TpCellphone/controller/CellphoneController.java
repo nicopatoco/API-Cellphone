@@ -23,8 +23,9 @@ public class CellphoneController {
         return CELLPHONE_SERVICE.getById(id_cellphone);
     }
 
+
     public void addCellphone(Cellphone newCellphone) {
-        CELLPHONE_SERVICE.addClient(newCellphone);
+        CELLPHONE_SERVICE.addCellphone(newCellphone);
     }
 
     public List<Cellphone> getAll() {

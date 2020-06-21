@@ -22,9 +22,9 @@ public class User {
     private String surname;
     private String username;
     private String password;
-    
-    private enum UserType {admin, client, antenna};
-    
+
+    public enum UserType {admin, client, antenna};
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_type")
     private  UserType userType;
