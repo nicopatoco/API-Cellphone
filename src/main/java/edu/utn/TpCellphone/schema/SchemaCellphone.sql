@@ -3,12 +3,13 @@ CREATE DATABASE IF NOT EXISTS CellphoneCompany;
 
 USE CellphoneCompany;
 
+
 CREATE TABLE IF NOT EXISTS Provinces
 (
     id_province INT(10) AUTO_INCREMENT,
     name        VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY (id_province)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS Cities
 (
@@ -18,12 +19,12 @@ CREATE TABLE IF NOT EXISTS Cities
     prefix      INT(4)       NOT NULL UNIQUE,
     PRIMARY KEY (id_city),
     CONSTRAINT id_province_cities FOREIGN KEY (id_province) REFERENCES Provinces (id_province)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS Users
 (
     id_user   INT(10) AUTO_INCREMENT,
-    id        VARCHAR(8)                          NOT NULL UNIQUE,
+    id        VARCHAR(20)                         NOT NULL UNIQUE,
     name      VARCHAR(32)                         NOT NULL,
     surname   VARCHAR(32)                         NOT NULL,
     username  VARCHAR(40)                         NOT NULL UNIQUE,
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS Users
     id_city   INT(10)                             NOT NULL,
     PRIMARY KEY (id_user),
     CONSTRAINT id_city_user FOREIGN KEY (id_city) REFERENCES Cities (id_city)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS Prices
 (
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Prices
     PRIMARY KEY (id_price),
     CONSTRAINT id_origin_city_prices FOREIGN KEY (id_origin_city) REFERENCES Cities (id_city),
     CONSTRAINT id_destination_city_prices FOREIGN KEY (id_destination_city) REFERENCES Cities (id_city)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 
 CREATE TABLE IF NOT EXISTS Cellphones
@@ -51,10 +52,11 @@ CREATE TABLE IF NOT EXISTS Cellphones
     id_cellphone     INT(10) AUTO_INCREMENT,
     cellphone_number VARCHAR(15)             NOT NULL UNIQUE,
     line_type        ENUM ("mobile", "home") NOT NULL,
+    status           INT(1) DEFAULT 1        NOT NULL,
     id_user          INT(10)                 NOT NULL,
     PRIMARY KEY (id_cellphone),
     CONSTRAINT id_user_cellphones FOREIGN KEY (id_user) REFERENCES Users (id_user)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 
 CREATE TABLE IF NOT EXISTS Bills
@@ -69,7 +71,7 @@ CREATE TABLE IF NOT EXISTS Bills
     PRIMARY KEY (id_bill),
     CONSTRAINT id_cellphone_bills FOREIGN KEY (id_cellphone) REFERENCES Cellphones (id_cellphone),
     CONSTRAINT id_user_bills FOREIGN KEY (id_user) REFERENCES Users (id_user)
-) CHARSET=utf8;
+) CHARSET = utf8;
 
 CREATE TABLE IF NOT EXISTS Calls
 (
@@ -89,7 +91,10 @@ CREATE TABLE IF NOT EXISTS Calls
     CONSTRAINT id_cellphone_destination_calls FOREIGN KEY (id_cellphone_destination) REFERENCES Cellphones (id_cellphone),
     CONSTRAINT id_price_calls FOREIGN KEY (id_price) REFERENCES Prices (id_price),
     CONSTRAINT id_bill_calls FOREIGN KEY (id_bill) REFERENCES Bills (id_bill)
-) CHARSET=utf8;
+) CHARSET = utf8;
+
+CREATE INDEX idx_start_time USING BTREE ON CALLS (start_time);
+CREATE INDEX idx_end_time USING BTREE ON CALLS (end_time);
 
 ## TRIGGERS AND STORES PROCEDURES
 
@@ -139,7 +144,8 @@ BEGIN
     SET count1 = (SELECT COUNT(*) FROM cellphones WHERE cellphone_number = new.number_origin);
     SET count2 = (SELECT COUNT(*) FROM cellphones WHERE cellphone_number = new.number_destination);
 
-    IF (count1 <= 0) OR (count2 <= 0) OR (new.number_origin = new.number_destination) THEN
+    IF (count1 <= 0)
+        OR (count2 <= 0) OR (new.number_origin = new.number_destination) THEN
         SIGNAL SQLSTATE '10001'
             SET MESSAGE_TEXT = 'Wrong number ',
                 MYSQL_ERRNO = 2.2;
@@ -275,3 +281,48 @@ CREATE EVENT IF NOT EXISTS sp_invoicing
     DO
     call sp_invoicing();
 //
+
+
+DELIMITER $$
+CREATE PROCEDURE sp_insert_calls_massive()
+set_calls :
+BEGIN
+    DECLARE x INT;
+    SET x = 1;
+    WHILE x <= 5
+        DO
+            insert into calls (number_origin, number_destination, start_time, end_time)
+            SELECT o.cellphone_number, d.cellphone_number, NOW() - INTERVAL FLOOR(RAND() * 14) DAY, NOW()
+            FROM cellphones as o,
+                 cellphones d
+            WHERE o.id_cellphone < 50
+              AND d.id_cellphone > 50;
+            SET x = x + 1;
+        END WHILE;
+END $$
+
+## JORGE
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\provinces.csv' INTO TABLE provinces FIELDS TERMINATED BY ',' (name);
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cities.csv' INTO TABLE cities FIELDS TERMINATED BY ',' (id_province, name, prefix);
+INSERT INTO users(id, name, surname, username, password, user_type, id_city)
+VALUES ('00000000', 'antenna', 'antenna', 'antenna', 'F212100E38F782E152EBFAB712A0E6EC', 'antenna', 1);
+INSERT INTO prices (id_origin_city, id_destination_city, price_per_minute)
+SELECT o.id_city, d.id_city, RAND()
+FROM cities as o,
+     cities d;
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\users.csv' INTO TABLE users FIELDS TERMINATED BY ',' (id, name, surname, username, password, user_type, id_city);
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cellphones.csv' INTO TABLE cellphones FIELDS TERMINATED BY ',' (cellphone_number, line_type, id_user);
+call sp_insert_calls_massive();
+
+## NICO
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\provinces.csv' INTO TABLE provinces FIELDS TERMINATED BY ',' (name);
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cities.csv' INTO TABLE cities FIELDS TERMINATED BY ',' (id_province, name, prefix);
+INSERT INTO users(id, name, surname, username, password, user_type, id_city)
+VALUES ('00000000', 'antenna', 'antenna', 'antenna', 'F212100E38F782E152EBFAB712A0E6EC', 'antenna', 1);
+INSERT INTO prices (id_origin_city, id_destination_city, price_per_minute)
+SELECT o.id_city, d.id_city, RAND()
+FROM cities as o,
+     cities d;
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\users.csv' INTO TABLE users FIELDS TERMINATED BY ',' (id, name, surname, username, password, user_type, id_city);
+LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cellphones.csv' INTO TABLE cellphones FIELDS TERMINATED BY ',' (cellphone_number, line_type, id_user);
+call sp_insert_calls_massive();
