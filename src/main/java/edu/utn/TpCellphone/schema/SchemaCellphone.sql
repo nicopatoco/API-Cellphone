@@ -281,14 +281,12 @@ LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCell
 call sp_insert_calls_massive();
 
 ## NICO
-LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\provinces.csv' INTO TABLE provinces FIELDS TERMINATED BY ',' (name);
-LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cities.csv' INTO TABLE cities FIELDS TERMINATED BY ',' (id_province, name, prefix);
+LOAD DATA INFILE '/Users/np.herrera/Documents/Facu/Programacion avanzada/TpCellphone/src/main/java/edu/utn/TpCellphone/data/provinces.csv' INTO TABLE provinces FIELDS TERMINATED BY ',' (name);
+LOAD DATA INFILE '/Users/np.herrera/Documents/Facu/Programacion avanzada/TpCellphone/src/main/java/edu/utn/TpCellphone/data/cities.csv' INTO TABLE cities FIELDS TERMINATED BY ',' (id_province, name, prefix);
 INSERT INTO users(id, name, surname, username, password, user_type, id_city)
 VALUES ('00000000', 'antenna', 'antenna', 'antenna', 'F212100E38F782E152EBFAB712A0E6EC', 'antenna', 1);
 INSERT INTO prices (id_origin_city, id_destination_city, price_per_minute)
-SELECT o.id_city, d.id_city, RAND()
-FROM cities as o,
-     cities d;
-LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\users.csv' INTO TABLE users FIELDS TERMINATED BY ',' (id, name, surname, username, password, user_type, id_city);
-LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\cellphones.csv' INTO TABLE cellphones FIELDS TERMINATED BY ',' (cellphone_number, line_type, id_user);
+SELECT o.id_city, d.id_city, RAND() FROM cities as o, cities d;
+LOAD DATA INFILE '/Users/np.herrera/Documents/Facu/Programacion avanzada/TpCellphone/src/main/java/edu/utn/TpCellphone/data/users.csv' INTO TABLE users FIELDS TERMINATED BY ',' (id, name, surname, username, password, user_type, id_city);
+LOAD DATA INFILE '/Users/np.herrera/Documents/Facu/Programacion avanzada/TpCellphone/src/main/java/edu/utn/TpCellphone/data/cellphones.csv' INTO TABLE cellphones FIELDS TERMINATED BY ',' (cellphone_number, line_type, id_user);
 call sp_insert_calls_massive();
