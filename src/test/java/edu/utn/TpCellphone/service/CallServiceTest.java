@@ -37,12 +37,24 @@ public class CallServiceTest {
     
     @Test
     public void getCallByIdTest() {
-        Call call = new Call(1, new Date(), new Date(), 123.0, "2233123680", "2233123679", 5, new Cellphone(), new Cellphone(), new Price(), new Bill());
+        Call call = new Call();
+        call.setIdCall(1);
+        call.setStartTime(new Date());
+        call.setEndTime(new Date());
+        call.setFinalValue(100.00);
+        call.setNumberOrigin("2233123680");
+        call.setNumberDestination("2233123679");
+        call.setDuration(5);
+        call.setCellphoneOrigin(new Cellphone());
+        call.setCellphoneDestination(new Cellphone());
+        call.setPrice(new Price());
+        call.setBill(new Bill());
         
         when(repository.findById(call.getIdCall())).thenReturn(java.util.Optional.of(call));
         Optional<Call> response = callService.getById(call.getIdCall());
         
         assertEquals(call, response.get());
+        assertEquals(call.toString(), response.get().toString());
         
         when(repository.findById(call.getIdCall())).thenReturn(Optional.empty());
         Optional<Call> response2 = callService.getById(call.getIdCall());
