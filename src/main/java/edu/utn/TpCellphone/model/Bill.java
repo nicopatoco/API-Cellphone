@@ -32,7 +32,7 @@ public class Bill {
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_user")
-    private User idUser;
+    private User user;
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_cellphone")
