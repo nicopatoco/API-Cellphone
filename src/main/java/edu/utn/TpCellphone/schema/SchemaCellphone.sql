@@ -3,7 +3,6 @@ CREATE DATABASE IF NOT EXISTS CellphoneCompany;
 
 USE CellphoneCompany;
 
-
 CREATE TABLE IF NOT EXISTS Provinces
 (
     id_province INT(10) AUTO_INCREMENT,
@@ -46,7 +45,6 @@ CREATE TABLE IF NOT EXISTS Prices
     CONSTRAINT id_destination_city_prices FOREIGN KEY (id_destination_city) REFERENCES Cities (id_city)
 ) CHARSET = utf8;
 
-
 CREATE TABLE IF NOT EXISTS Cellphones
 (
     id_cellphone     INT(10) AUTO_INCREMENT,
@@ -57,7 +55,6 @@ CREATE TABLE IF NOT EXISTS Cellphones
     PRIMARY KEY (id_cellphone),
     CONSTRAINT id_user_cellphones FOREIGN KEY (id_user) REFERENCES Users (id_user)
 ) CHARSET = utf8;
-
 
 CREATE TABLE IF NOT EXISTS Bills
 (
@@ -116,10 +113,6 @@ BEGIN
 END
 //
 
-SHOW TRIGGERS;
-
-DROP TRIGGER tbi_calls;
-
 DELIMITER $$
 CREATE TRIGGER tbi_calls
     BEFORE INSERT
@@ -133,13 +126,11 @@ BEGIN
     DECLARE count1 INT;
     DECLARE count2 INT;
 
-
     IF (TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time) < 0) THEN
         SIGNAL SQLSTATE '10001'
             SET MESSAGE_TEXT = 'Wrong date, the call can not have a negative minutes call',
                 MYSQL_ERRNO = 2.2;
     END IF;
-
 
     SET count1 = (SELECT COUNT(*) FROM cellphones WHERE cellphone_number = new.number_origin);
     SET count2 = (SELECT COUNT(*) FROM cellphones WHERE cellphone_number = new.number_destination);
@@ -151,11 +142,9 @@ BEGIN
                 MYSQL_ERRNO = 2.2;
     END IF;
 
-
     SET new.id_cellphone_origin = (SELECT id_cellphone FROM cellphones WHERE cellphone_number = new.number_origin);
     SET new.id_cellphone_destination =
             (SELECT id_cellphone FROM cellphones WHERE cellphone_number = new.number_destination);
-
 
     SELECT u.id_city
     INTO set_id_city_origin
@@ -163,13 +152,11 @@ BEGIN
              JOIN users u ON u.id_user = ce.id_user
     WHERE ce.id_cellphone = new.id_cellphone_origin;
 
-
     SELECT u.id_city
     INTO set_id_city_destination
     FROM cellphones ce
              JOIN users u ON u.id_user = ce.id_user
     WHERE ce.id_cellphone = new.id_cellphone_destination;
-
 
     SELECT price_per_minute, id_price
     INTO set_price, set_id_price
@@ -177,18 +164,12 @@ BEGIN
     WHERE id_origin_city = set_id_city_origin
       AND id_destination_city = set_id_city_destination;
 
-
     SET new.duration = TIMESTAMPDIFF(MINUTE, new.start_time, new.end_time);
     SET new.final_value = set_price * new.duration;
     SET new.id_price = set_id_price;
 
 END
 $$
-
-TRUNCATE TABLE stringg;
-SELECT *
-FROM stringg;
-
 
 # 1 of month , execute method sp_invoicing() -> the calls that are not invoicing, generate an new bill with 15 days used.
 DELIMITER //
@@ -250,17 +231,6 @@ begin
 END
 //
 
-
-CREATE TABLE stringg
-(
-    id      int auto_increment primary key,
-    message VARCHAR(255)
-);
-
-
-
-DROP PROCEDURE debug_msg;
-
 DELIMITER $$
 CREATE PROCEDURE debug_msg(enabled INTEGER, msg VARCHAR(255))
 BEGIN
@@ -270,9 +240,6 @@ BEGIN
 END
 $$
 
-SELECT *
-FROM stringg;
-
 DELIMITER //
 CREATE EVENT IF NOT EXISTS sp_invoicing
     ON SCHEDULE EVERY '1' MONTH
@@ -281,7 +248,6 @@ CREATE EVENT IF NOT EXISTS sp_invoicing
     DO
     call sp_invoicing();
 //
-
 
 DELIMITER $$
 CREATE PROCEDURE sp_insert_calls_massive()
