@@ -216,4 +216,14 @@ public class UserServiceTest {
         
         assertEquals(getBills, response);
     }
+    
+    @Test
+    public void getCallsByUserIdTest() {
+        User user = new User(1,"333","nico","herrera", "nicopatoco", "123abc", null, new City());
+        
+        when(repository.getCallsByUserId(user.getIdUser())).thenReturn(getCalls);
+        List<GetCall> response = userService.getCallsByUserId(user.getIdUser());
+    
+        assertEquals(getCalls, response);
+    }
 }

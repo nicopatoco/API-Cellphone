@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.security.NoSuchAlgorithmException;
@@ -222,6 +223,23 @@ public class UserControllerTest {
         
         assertThrows(BillNotFoundException.class, () -> {
             userController.getBillsByRangeDate(1, new Date(), new Date());
+        });
+    }
+    
+    @Test
+    public void getCallsByUserIdTest() throws CallNotFoundException {
+        Date date1 = new Date();
+        when(service.getCallsByUserId(1)).thenReturn(getCallProjections);
+        ResponseEntity<List<GetCall>> response = userController.getCallsByUserId(1);
+        
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(this.getCallProjections, response.getBody());
+        
+        List<GetCall> getCalls = new ArrayList<>();
+        when(service.getCallsByUserId(1)).thenReturn(getCalls);
+        
+        assertThrows(CallNotFoundException.class, () -> {
+            userController.getCallsByUserId(1);
         });
     }
 }

@@ -127,7 +127,6 @@ public class AdminController {
         return this.priceController.getPriceById(idPrice);
     }
 
-
     /**
      * BILL
      */
@@ -141,6 +140,4 @@ public class AdminController {
     public ResponseEntity<Bill> getByIdBill(@PathVariable Integer idBill) throws BillNotFoundException {
         return this.billController.getByIdBill(idBill);
     }
-
-
 }

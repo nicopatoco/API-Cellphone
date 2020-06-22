@@ -39,6 +39,13 @@ public class AntennaController {
     public ResponseEntity logout(@RequestHeader("Authorization") String token) {
         return this.loginController.logout(token);
     }
+    
+    /**
+     * Call
+     * @param call
+     * @return
+     * @throws SQLException
+     */
 
     @PostMapping("/call/")
     public ResponseEntity addCall(@RequestBody CallAddDto call) throws SQLException {
