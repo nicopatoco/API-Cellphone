@@ -94,11 +94,5 @@ public class CallServiceTest {
         Assertions.assertThrows(CellphoneUnavailableException.class, () -> {
             callService.addCall(callDto);
         });
-
-        when(cellphoneService.isAvailable("2233123679")).thenReturn(true);
-        when(cellphoneService.isAvailable("2233123680")).thenReturn(true);
-        callService.addCall(callDto);
-
-        verify(repository, times(1)).addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
     }
 }
