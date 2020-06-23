@@ -9,6 +9,7 @@ import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.Price;
 import edu.utn.TpCellphone.repository.CallRepository;
 import edu.utn.TpCellphone.repository.CellphoneRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +40,10 @@ public class CallServiceTest {
     
     @Mock
     private CellphoneService cellphoneService;
-    
+
+    @Mock
+    private CellphoneService cellphoneService2;
+
     @Test
     public void getCallByIdTest() {
         Call call = new Call();
@@ -84,10 +88,17 @@ public class CallServiceTest {
         CallAddDto callDto = new CallAddDto("2233123679", "2233123680", new Date(), new Date());
         
         doNothing().when(repository).addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
+        when(cellphoneService.isAvailable("2233123679")).thenReturn(false);
+        when(cellphoneService.isAvailable("2233123680")).thenReturn(false);
+
+        Assertions.assertThrows(CellphoneUnavailableException.class, () -> {
+            callService.addCall(callDto);
+        });
+
         when(cellphoneService.isAvailable("2233123679")).thenReturn(true);
         when(cellphoneService.isAvailable("2233123680")).thenReturn(true);
         callService.addCall(callDto);
-        
+
         verify(repository, times(1)).addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
     }
 }
