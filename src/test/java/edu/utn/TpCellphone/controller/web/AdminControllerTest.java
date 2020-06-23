@@ -4,6 +4,7 @@ import edu.utn.TpCellphone.controller.*;
 import edu.utn.TpCellphone.dto.LoginRequestDto;
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CellphoneNotFoundException;
 import edu.utn.TpCellphone.exceptions.PriceNotFoundException;
 import edu.utn.TpCellphone.model.Bill;
 import edu.utn.TpCellphone.model.Cellphone;
@@ -210,5 +211,25 @@ public class AdminControllerTest {
         
         assertEquals(responseEntity, response);
         assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void downLine() throws CellphoneNotFoundException {
+        ResponseEntity<Cellphone> response = ResponseEntity.ok().build();
+        when(cellphoneController.downLine(1)).thenReturn(response);
+
+        adminController.downLine(1);
+
+        verify(cellphoneController,times(1)).downLine(1);
+    }
+
+    @Test
+    public void upLine() throws CellphoneNotFoundException {
+        ResponseEntity<Cellphone> response = ResponseEntity.ok().build();
+        when(cellphoneController.upLine(1)).thenReturn(response);
+
+        adminController.upLine(1);
+
+        verify(cellphoneController,times(1)).upLine(1);
     }
 }

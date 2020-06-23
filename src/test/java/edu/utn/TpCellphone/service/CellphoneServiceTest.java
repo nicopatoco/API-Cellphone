@@ -3,6 +3,7 @@ package edu.utn.TpCellphone.service;
 import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.User;
 import edu.utn.TpCellphone.repository.CellphoneRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -73,4 +74,42 @@ public class CellphoneServiceTest {
         
         verify(repository, times(1)).delete(cellphone1);
     }
+
+    @Test
+    public void isAvailableTest(){
+
+        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
+
+        when(repository.isAvailable(cellphone1.getCellphoneNumber())).thenReturn(Optional.of(cellphone1));
+        Boolean response = cellphoneService.isAvailable(cellphone1.getCellphoneNumber());
+
+        Assertions.assertTrue(response);
+
+        when(repository.isAvailable(cellphone1.getCellphoneNumber())).thenReturn(Optional.empty());
+        Boolean response2 = cellphoneService.isAvailable(cellphone1.getCellphoneNumber());
+
+        Assertions.assertFalse(response2);
+    }
+
+     @Test
+    public void downLineTest(){
+         Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
+
+         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.of(cellphone1));
+         Optional<Cellphone> response = cellphoneService.downLine(cellphone1.getIdCellphone());
+
+         Assertions.assertFalse(cellphone1.getStatus());
+
+     }
+
+     @Test
+     public void upLineTest(){
+         Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
+
+         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.of(cellphone1));
+         Optional<Cellphone> response = cellphoneService.upLine(cellphone1.getIdCellphone());
+
+         Assertions.assertTrue(cellphone1.getStatus());
+
+     }
 }
