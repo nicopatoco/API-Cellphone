@@ -1,5 +1,6 @@
 package edu.utn.TpCellphone.controller;
 
+import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.exceptions.CellphoneNotFoundException;
 import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.User;
@@ -102,6 +103,8 @@ public class CellphoneControllerTest {
         Assertions.assertThrows(CellphoneNotFoundException.class, () -> {
             cellphoneController.downLine(cellphone1.getIdCellphone());
         });
+
+        Assertions.assertEquals("Cellphone not found", new CellphoneNotFoundException().getMessage());
     }
 
     @Test
@@ -119,5 +122,7 @@ public class CellphoneControllerTest {
         Assertions.assertThrows(CellphoneNotFoundException.class, () -> {
             cellphoneController.upLine(cellphone1.getIdCellphone());
         });
+
+        Assertions.assertEquals("Cellphone not found", new CellphoneNotFoundException().getMessage());
     }
 }

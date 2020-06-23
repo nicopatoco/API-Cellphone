@@ -1,10 +1,12 @@
 package edu.utn.TpCellphone.controller;
 
 
+import edu.utn.TpCellphone.exceptions.CellphoneNotFoundException;
 import edu.utn.TpCellphone.exceptions.CityNotFoundException;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.service.CityService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -134,5 +136,7 @@ public class CityControllerTest {
             ResponseEntity<List<City>> response = cityController.getCityBetween200And400();
             assertEquals(400, response);
         });
+
+        Assertions.assertEquals("Cities not found", new CityNotFoundException().getMessage());
     }
 }

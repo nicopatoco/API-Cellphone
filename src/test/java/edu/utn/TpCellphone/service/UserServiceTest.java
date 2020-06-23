@@ -1,5 +1,6 @@
 package edu.utn.TpCellphone.service;
 
+import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Province;
 import edu.utn.TpCellphone.model.User;
@@ -183,6 +184,7 @@ public class UserServiceTest {
         assertThrows(RuntimeException.class, () -> {
             userService.login(username, password, type);
         });
+
     }
     
     @Test

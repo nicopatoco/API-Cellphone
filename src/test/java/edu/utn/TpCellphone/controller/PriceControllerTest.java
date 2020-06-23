@@ -1,6 +1,7 @@
 package edu.utn.TpCellphone.controller;
 
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
+import edu.utn.TpCellphone.exceptions.CityNotFoundException;
 import edu.utn.TpCellphone.exceptions.PriceNotFoundException;
 import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.Price;
@@ -51,6 +52,8 @@ public class PriceControllerTest {
         assertThrows(PriceNotFoundException.class, () -> {
             priceController.getPriceById(price.getIdPrice());
         });
+
+        Assertions.assertEquals("Price not found", new PriceNotFoundException().getMessage());
     }
     
     @Test
