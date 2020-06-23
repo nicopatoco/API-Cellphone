@@ -4,6 +4,7 @@ import edu.utn.TpCellphone.controller.*;
 import edu.utn.TpCellphone.dto.LoginRequestDto;
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CellphoneNotFoundException;
 import edu.utn.TpCellphone.exceptions.PriceNotFoundException;
 import edu.utn.TpCellphone.model.Bill;
 import edu.utn.TpCellphone.model.Cellphone;
@@ -98,7 +99,17 @@ public class AdminController {
     public void deleteCellphone(@RequestBody Cellphone cellphone) {
         this.cellphoneController.deleteCellphone(cellphone);
     }
-
+    
+    @PutMapping("/cellphone/downLine/{idCellphone}")
+    public void downLine(@PathVariable int idCellphone) throws CellphoneNotFoundException {
+        this.cellphoneController.downLine(idCellphone);
+    }
+    
+    @PutMapping("/cellphone/upLine/{idCellphone}")
+    public void upLine(@PathVariable int idCellphone) throws CellphoneNotFoundException {
+        this.cellphoneController.upLine(idCellphone);
+    }
+    
     /**
      * PRICES
      */

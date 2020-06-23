@@ -36,4 +36,22 @@ public class CellphoneService {
         Optional<Cellphone> cellphone1 = CELLPHONE_REPOSITORY.isAvailable(cellphone);
         return !cellphone1.isEmpty();
     }
+    
+    public Optional<Cellphone> downLine(int idCellphone) {
+        Optional<Cellphone> cellphone = CELLPHONE_REPOSITORY.findById(idCellphone);
+        if(!cellphone.isEmpty()){
+            cellphone.get().setStatus(false);
+            CELLPHONE_REPOSITORY.save(cellphone.get());
+        }
+        return cellphone;
+    }
+    
+    public Optional<Cellphone> upLine(int idCellphone) {
+        Optional<Cellphone> cellphone = CELLPHONE_REPOSITORY.findById(idCellphone);
+        if(!cellphone.isEmpty()){
+            cellphone.get().setStatus(true);
+            CELLPHONE_REPOSITORY.save(cellphone.get());
+        }
+        return cellphone;
+    }
 }
