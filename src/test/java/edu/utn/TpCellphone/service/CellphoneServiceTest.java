@@ -95,28 +95,19 @@ public class CellphoneServiceTest {
     public void downLineTest(){
          Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
 
-         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.empty());
+         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.of(cellphone1));
          Optional<Cellphone> response = cellphoneService.downLine(cellphone1.getIdCellphone());
 
-         Assertions.assertTrue(cellphone1.getStatus());
-
-         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.of(cellphone1));
-         Optional<Cellphone> response2 = cellphoneService.downLine(cellphone1.getIdCellphone());
-
          Assertions.assertFalse(cellphone1.getStatus());
+
      }
 
      @Test
      public void upLineTest(){
          Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
 
-         when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.empty());
-         Optional<Cellphone> response = cellphoneService.upLine(cellphone1.getIdCellphone());
-
-         Assertions.assertTrue(cellphone1.getStatus());
-
          when(repository.findById(cellphone1.getIdCellphone())).thenReturn(Optional.of(cellphone1));
-         Optional<Cellphone> response2 = cellphoneService.upLine(cellphone1.getIdCellphone());
+         Optional<Cellphone> response = cellphoneService.upLine(cellphone1.getIdCellphone());
 
          Assertions.assertTrue(cellphone1.getStatus());
 

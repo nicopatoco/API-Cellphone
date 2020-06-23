@@ -59,8 +59,6 @@ public class CallControllerTest {
         Assertions.assertThrows(CallNotFoundException.class, () -> {
             callController.getCallById(call.getIdCall());
         });
-
-        Assertions.assertEquals("Call not found", new CallNotFoundException().getMessage());
     }
     
     @Test
@@ -79,8 +77,6 @@ public class CallControllerTest {
         Assertions.assertThrows(CallNotFoundException.class, () -> {
             callController.getAllCalls();
         });
-
-        Assertions.assertEquals("Call not found", new CallNotFoundException().getMessage());
     }
     
     @Test
@@ -102,7 +98,5 @@ public class CallControllerTest {
         
         ResponseEntity response2 = callController.addCall(callDto);
         assertEquals(500, response2.getStatusCodeValue());
-
-        Assertions.assertEquals("The cellphone have a downLine", new CellphoneUnavailableException().getMessage());
     }
 }

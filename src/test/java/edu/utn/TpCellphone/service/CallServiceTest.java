@@ -94,7 +94,5 @@ public class CallServiceTest {
         Assertions.assertThrows(CellphoneUnavailableException.class, () -> {
             callService.addCall(callDto);
         });
-
-        Assertions.assertEquals("Call not found", new CallNotFoundException().getMessage());
     }
 }
