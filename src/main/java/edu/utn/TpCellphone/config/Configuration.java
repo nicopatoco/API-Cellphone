@@ -11,14 +11,20 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @PropertySource("app.properties")
 @EnableScheduling
 public class Configuration {
-    
+
     @Autowired
-    SessionFilter sessionFilter;
+    SessionFilter sessionAdminFilter;
+
+    @Autowired
+    SessionFilter sessionClientFilter;
+
+    @Autowired
+    SessionFilter sessionAntennaFilter;
 
     @Bean
     public FilterRegistrationBean adminFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(sessionFilter);
+        registration.setFilter(sessionAdminFilter);
         registration.addUrlPatterns("/admin/*");
         return registration;
     }
@@ -26,7 +32,15 @@ public class Configuration {
     @Bean
     public FilterRegistrationBean clientFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(sessionFilter);
+        registration.setFilter(sessionClientFilter);
+        registration.addUrlPatterns("/client/*");
+        return registration;
+    }
+
+    @Bean
+    public FilterRegistrationBean antennaFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(sessionAntennaFilter);
         registration.addUrlPatterns("/client/*");
         return registration;
     }

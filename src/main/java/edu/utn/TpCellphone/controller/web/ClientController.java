@@ -49,11 +49,6 @@ public class ClientController {
      * LOGIN
      */
 
-    @PostMapping("/login/")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) throws NoSuchAlgorithmException {
-        return this.loginController.login(loginRequestDto, "client");
-    }
-
     @PostMapping("/logout/")
     public ResponseEntity logout(@RequestHeader("Authorization") String token) {
         return this.loginController.logout(token);
