@@ -48,6 +48,8 @@ public class BillControllerTest {
         Assertions.assertThrows(BillNotFoundException.class, () -> {
             billController.getByIdBill(bill.getIdBill());
         });
+
+        Assertions.assertEquals("Bill not found", new BillNotFoundException().getMessage());
     }
     
     @Test
@@ -68,5 +70,7 @@ public class BillControllerTest {
         Assertions.assertThrows(BillNotFoundException.class, () -> {
             billController.getAllBills();
         });
+
+        Assertions.assertEquals("Bill not found", new BillNotFoundException().getMessage());
     }
 }
