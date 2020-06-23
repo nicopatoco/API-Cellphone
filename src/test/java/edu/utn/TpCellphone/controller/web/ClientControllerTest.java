@@ -50,33 +50,6 @@ public class ClientControllerTest {
     private SessionManager sessionManager;
     
     /**
-     * LOGIN
-     */
-    
-    @Test
-    public void loginTest() throws NoSuchAlgorithmException {
-        LoginRequestDto loginRequestDto = new LoginRequestDto();
-        String type = "client";
-        ResponseEntity responseEntity = ResponseEntity.ok().build();
-        
-        when(loginController.login(loginRequestDto, type)).thenReturn(responseEntity);
-        ResponseEntity response = clientController.login(loginRequestDto);
-        
-        Assertions.assertEquals(responseEntity, response);
-    }
-    
-    @Test
-    public void logoutTest() {
-        String token = "aslkdjaslkdjaskld";
-        ResponseEntity responseEntity = ResponseEntity.ok(token);
-        
-        when(loginController.logout(token)).thenReturn(responseEntity);
-        ResponseEntity response = clientController.logout(token);
-        
-        Assertions.assertEquals(responseEntity, response);
-    }
-    
-    /**
      * USER
      */
     

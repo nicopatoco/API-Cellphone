@@ -13,13 +13,13 @@ import java.security.NoSuchAlgorithmException;
  * API filter for admins
  * http://localhost/admin
  */
-@RequestMapping("/login")
-public class LoginWebController {
+@RequestMapping("/account")
+public class AccountController {
 
     private LoginController loginController;
 
     @Autowired
-    public LoginWebController(LoginController loginController) {
+    public AccountController(LoginController loginController) {
         this.loginController = loginController;
     }
 

@@ -44,16 +44,6 @@ public class ClientController {
         this.sessionManager = sessionManager;
     }
 
-
-    /**
-     * LOGIN
-     */
-
-    @PostMapping("/logout/")
-    public ResponseEntity logout(@RequestHeader("Authorization") String token) {
-        return this.loginController.logout(token);
-    }
-
     /**
      * USER
      */

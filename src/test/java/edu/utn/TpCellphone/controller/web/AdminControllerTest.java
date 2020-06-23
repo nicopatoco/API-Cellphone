@@ -48,33 +48,6 @@ public class AdminControllerTest {
     private BillController billController;
     
     /**
-     * LOGIN
-     */
-    
-    @Test
-    public void loginTest() throws NoSuchAlgorithmException {
-        LoginRequestDto loginRequestDto = new LoginRequestDto();
-        String type = "admin";
-        ResponseEntity responseEntity = ResponseEntity.ok().build();
-        
-        when(loginController.login(loginRequestDto, type)).thenReturn(responseEntity);
-        ResponseEntity response = adminController.login(loginRequestDto);
-        
-        Assertions.assertEquals(responseEntity, response);
-    }
-    
-    @Test
-    public void logoutTest() {
-        String token = "aslkdjaslkdjaskld";
-        ResponseEntity responseEntity = ResponseEntity.ok(token);
-        
-        when(loginController.logout(token)).thenReturn(responseEntity);
-        ResponseEntity response = adminController.logout(token);
-        
-        Assertions.assertEquals(responseEntity, response);
-    }
-    
-    /**
      * USERS
      */
     

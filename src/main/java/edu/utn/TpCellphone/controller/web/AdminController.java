@@ -41,15 +41,6 @@ public class AdminController {
     }
 
     /**
-     * LOGIN
-     */
-
-    @PostMapping("/logout/")
-    public ResponseEntity logout(@RequestHeader("Authorization") String token) {
-        return this.loginController.logout(token);
-    }
-
-    /**
      * USERS
      */
 
