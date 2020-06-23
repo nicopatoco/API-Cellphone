@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @org.springframework.context.annotation.Configuration
 @PropertySource("app.properties")
 @EnableScheduling
-//@EnableCaching
 public class Configuration {
     
     @Autowired
@@ -31,16 +30,4 @@ public class Configuration {
         registration.addUrlPatterns("/client/*");
         return registration;
     }
-
-
-
-   /*@Bean
-    public CacheManager cacheManager() {
-        // configure and return an implementation of Spring's CacheManager SPI
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("default")));
-        return cacheManager;
-    }
-
-    */
 }

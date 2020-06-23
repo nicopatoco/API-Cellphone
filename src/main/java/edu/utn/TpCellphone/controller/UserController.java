@@ -3,14 +3,15 @@ package edu.utn.TpCellphone.controller;
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
 import edu.utn.TpCellphone.model.User;
-import edu.utn.TpCellphone.projections.*;
+import edu.utn.TpCellphone.projections.GetBill;
+import edu.utn.TpCellphone.projections.GetCall;
+import edu.utn.TpCellphone.projections.GetUserReduce;
+import edu.utn.TpCellphone.projections.GetUserTop10Destinations;
 import edu.utn.TpCellphone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
