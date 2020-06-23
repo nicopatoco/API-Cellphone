@@ -31,4 +31,9 @@ public class CellphoneService {
     public void delete(Cellphone cellphone) {
         CELLPHONE_REPOSITORY.delete(cellphone);
     }
+    
+    public boolean isAvailable(String cellphone) {
+        Optional<Cellphone> cellphone1 = CELLPHONE_REPOSITORY.isAvailable(cellphone);
+        return !cellphone1.isEmpty();
+    }
 }

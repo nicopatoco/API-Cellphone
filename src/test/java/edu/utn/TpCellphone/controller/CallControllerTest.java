@@ -3,11 +3,13 @@ package edu.utn.TpCellphone.controller;
 import edu.utn.TpCellphone.dto.CallAddDto;
 import edu.utn.TpCellphone.dto.CallDto;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CellphoneUnavailableException;
 import edu.utn.TpCellphone.model.Bill;
 import edu.utn.TpCellphone.model.Call;
 import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.Price;
 import edu.utn.TpCellphone.service.CallService;
+import edu.utn.TpCellphone.service.CellphoneService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,10 @@ public class CallControllerTest {
     
     @Mock
     private CallService service;
+    
+    @Mock
+    private CellphoneService cellphoneService;
+    
     
     @Test
     public void getCallByIdTest() throws CallNotFoundException {
@@ -74,10 +80,13 @@ public class CallControllerTest {
     }
     
     @Test
-    public void addCallTest() throws SQLException {
+    public void addCallTest() throws SQLException, CellphoneUnavailableException {
         CallAddDto callDto = new CallAddDto("2233123679", "2233123680", new Date(), new Date());
         
         doNothing().when(service).addCall(callDto);
+        when(cellphoneService.isAvailable("2233123679")).thenReturn(true);
+        when(cellphoneService.isAvailable("2233123680")).thenReturn(true);
+        
         ResponseEntity response = callController.addCall(callDto);
         
         verify(service, times(1)).addCall(callDto);

@@ -3,6 +3,7 @@ package edu.utn.TpCellphone.controller;
 import edu.utn.TpCellphone.dto.CallAddDto;
 import edu.utn.TpCellphone.dto.CallDto;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CellphoneUnavailableException;
 import edu.utn.TpCellphone.model.Call;
 import edu.utn.TpCellphone.service.CallService;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public class CallController {
             URI local = new URI("localhost:8080/antenna/call/");
             CALL_SERVICE.addCall(call);
             return ResponseEntity.created(local).body(call);
-        } catch (SQLException | URISyntaxException e) {
+        } catch (SQLException | URISyntaxException | CellphoneUnavailableException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

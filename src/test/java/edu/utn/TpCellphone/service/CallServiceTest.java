@@ -2,11 +2,13 @@ package edu.utn.TpCellphone.service;
 
 import edu.utn.TpCellphone.dto.CallAddDto;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CellphoneUnavailableException;
 import edu.utn.TpCellphone.model.Bill;
 import edu.utn.TpCellphone.model.Call;
 import edu.utn.TpCellphone.model.Cellphone;
 import edu.utn.TpCellphone.model.Price;
 import edu.utn.TpCellphone.repository.CallRepository;
+import edu.utn.TpCellphone.repository.CellphoneRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,6 +36,9 @@ public class CallServiceTest {
     
     @Mock
     private CallRepository repository;
+    
+    @Mock
+    private CellphoneService cellphoneService;
     
     @Test
     public void getCallByIdTest() {
@@ -75,10 +80,12 @@ public class CallServiceTest {
     }
     
     @Test
-    public void addCallTest() throws SQLException {
+    public void addCallTest() throws SQLException, CellphoneUnavailableException {
         CallAddDto callDto = new CallAddDto("2233123679", "2233123680", new Date(), new Date());
         
         doNothing().when(repository).addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
+        when(cellphoneService.isAvailable("2233123679")).thenReturn(true);
+        when(cellphoneService.isAvailable("2233123680")).thenReturn(true);
         callService.addCall(callDto);
         
         verify(repository, times(1)).addCall(callDto.getNumberOrigin(), callDto.getNumberDestination(), callDto.getStartTime(), callDto.getEndTime());
