@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS Bills
     id_bill         INT(10) AUTO_INCREMENT,
     id_cellphone    INT(10) NOT NULL,
     id_user         INT(10) NOT NULL,
-    amount_of_calls INT(10) UNSIGNED,
+    amount_of_calls INT(10),
     final_price     FLOAT,
     bill_date       DATE    NOT NULL,
     due_date        DATE    NOT NULL,
@@ -266,25 +266,6 @@ BEGIN
             SET x = x + 1;
         END WHILE;
 END $$
-
-DELIMITER //
-CREATE PROCEDURE sp_get_calls()
-BEGIN
-    SELECT ca.number_origin      as numero_origen,
-           ci1.name              as ciudad_origen,
-           ca.number_destination as numero_destino,
-           ci2.name              as ciudad_destino,
-           final_value           as precio,
-           duration              as duracion,
-           start_time            as fecha
-    FROM calls as ca
-             INNER JOIN Cellphones as ce1 ON ca.id_cellphone_origin = ce1.id_cellphone
-             INNER JOIN Cellphones as ce2 ON ca.id_cellphone_destination = ce2.id_cellphone
-             INNER JOIN Users as us1 ON us1.id_user = ce1.id_user
-             INNER JOIN Users as us2 ON us1.id_user = ce2.id_user
-             INNER JOIN Cities as ci1 ON ci1.id_city = us1.id_city
-             INNER JOIN Cities as ci2 ON ci2.id_city = us2.id_city;
-END //
 
 ## JORGE
 LOAD DATA INFILE 'D:\Google Drive\\UTN\\TUSI\\1ER CUATRIMESTRE\\TP FINAL\\TpCellphone\\src\\main\\java\\edu\\utn\\TpCellphone\\data\\provinces.csv' INTO TABLE provinces FIELDS TERMINATED BY ',' (name);
