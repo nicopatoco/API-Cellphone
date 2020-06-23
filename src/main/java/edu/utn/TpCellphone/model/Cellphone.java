@@ -25,6 +25,8 @@ public class Cellphone {
     @Column(name = "line_type")
     private LineType lineType;
     
+    private Boolean status;
+    
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_user")
     private User user;

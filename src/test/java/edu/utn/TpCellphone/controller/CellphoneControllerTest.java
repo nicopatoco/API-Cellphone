@@ -31,7 +31,7 @@ public class CellphoneControllerTest {
     
     @Test
     public void getCellphoneByIdTest() {
-        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         when(service.getById(cellphone.getIdCellphone())).thenReturn(java.util.Optional.of(cellphone));
         Optional<Cellphone> response = cellphoneController.getCellphoneById(cellphone.getIdCellphone());
         
@@ -61,8 +61,8 @@ public class CellphoneControllerTest {
     
     @Test
     public void getAllTest() {
-        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
-        Cellphone cellphone2 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
+        Cellphone cellphone2 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         List<Cellphone> cellphoneList = new ArrayList<>();
         cellphoneList.add(cellphone1);
         cellphoneList.add(cellphone2);
@@ -77,7 +77,7 @@ public class CellphoneControllerTest {
     
     @Test
     public void deleteCellphoneTest() {
-        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         
         doNothing().when(service).delete(cellphone1);
         cellphoneController.deleteCellphone(cellphone1);

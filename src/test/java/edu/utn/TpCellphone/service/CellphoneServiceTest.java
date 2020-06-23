@@ -31,7 +31,7 @@ public class CellphoneServiceTest {
     
     @Test
     public void getByIdTest() {
-        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         
         when(repository.findById(cellphone.getIdCellphone())).thenReturn(java.util.Optional.of(cellphone));
         Optional<Cellphone> response = cellphoneService.getById(cellphone.getIdCellphone());
@@ -42,7 +42,7 @@ public class CellphoneServiceTest {
     
     @Test
     public void addCellphoneTest() {
-        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         when(repository.save(cellphone)).thenReturn(cellphone);
         cellphoneService.addCellphone(cellphone);
         
@@ -51,8 +51,8 @@ public class CellphoneServiceTest {
     
     @Test
     public void getAllTest() {
-        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
-        Cellphone cellphone2 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
+        Cellphone cellphone2 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         List<Cellphone> cellphoneList = new ArrayList<>();
         cellphoneList.add(cellphone1);
         cellphoneList.add(cellphone2);
@@ -66,7 +66,7 @@ public class CellphoneServiceTest {
     
     @Test
     public void deleteTest() {
-        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, new User());
+        Cellphone cellphone1 = new Cellphone(1, "2233123680", Cellphone.LineType.home, true, new User());
         
         doNothing().when(repository).delete(cellphone1);
         cellphoneService.delete(cellphone1);
