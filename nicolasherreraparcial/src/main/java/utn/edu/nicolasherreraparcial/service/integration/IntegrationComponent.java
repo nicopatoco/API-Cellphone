@@ -17,7 +17,7 @@ public class IntegrationComponent {
     
     private RestTemplate rest;
     private static String urlLogin = "http://localhost:8080/account/client";
-    private static String urlCall = "http://localhost:8080/client/getCityBetween200And400";
+    private static String urlCity = "http://localhost:8080/client/getCityBetween200And400";
     
     @PostConstruct
     private void init() {
@@ -31,6 +31,6 @@ public class IntegrationComponent {
     }
     
     public List<City> getCityBetween200And400() {
-        return rest.getForObject(urlCall, List<Call>);
+        return rest.getForObject(urlCity, List<Call>);
     }
 }
