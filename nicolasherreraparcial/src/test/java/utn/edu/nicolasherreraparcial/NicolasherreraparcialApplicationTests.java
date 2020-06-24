@@ -1,0 +1,13 @@
+package utn.edu.nicolasherreraparcial;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class NicolasherreraparcialApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
