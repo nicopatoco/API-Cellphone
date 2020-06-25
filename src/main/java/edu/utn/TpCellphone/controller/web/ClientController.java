@@ -5,6 +5,8 @@ import edu.utn.TpCellphone.controller.*;
 import edu.utn.TpCellphone.dto.LoginRequestDto;
 import edu.utn.TpCellphone.exceptions.BillNotFoundException;
 import edu.utn.TpCellphone.exceptions.CallNotFoundException;
+import edu.utn.TpCellphone.exceptions.CityNotFoundException;
+import edu.utn.TpCellphone.model.City;
 import edu.utn.TpCellphone.model.User;
 import edu.utn.TpCellphone.projections.GetBill;
 import edu.utn.TpCellphone.projections.GetCall;
@@ -31,17 +33,19 @@ public class ClientController {
     private CellphoneController cellphoneController;
     private PriceController priceController;
     private BillController billController;
+    private CityController cityController;
 
     private final SessionManager sessionManager;
 
 
-    public ClientController(LoginController loginController, UserController userController, CellphoneController cellphoneController, PriceController priceController, BillController billController, SessionManager sessionManager) {
+    public ClientController(LoginController loginController, UserController userController, CellphoneController cellphoneController, PriceController priceController, BillController billController, SessionManager sessionManager, CityController cityController) {
         this.loginController = loginController;
         this.userController = userController;
         this.cellphoneController = cellphoneController;
         this.priceController = priceController;
         this.billController = billController;
         this.sessionManager = sessionManager;
+        this.cityController = cityController;
     }
 
     /**
@@ -66,6 +70,15 @@ public class ClientController {
         User user = sessionManager.getCurrentUser(sessionToken);
         return this.userController.getBillsByRangeDate(user.getIdUser(), dateFrom, dateTo);
     }
-
+    
+    /**
+     * PARCIAL NICOLAS HERRERA 1
+     */
+    @GetMapping("/user/getCityBetween200And400")
+    public ResponseEntity<List<City>> getCityBetween200And400(@RequestHeader("Authorization") String sessionToken) throws CityNotFoundException {
+        User user = sessionManager.getCurrentUser(sessionToken);
+        return this.cityController.getCityBetween200And400();
+    }
+    
 }
 
